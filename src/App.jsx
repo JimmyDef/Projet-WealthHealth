@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./layout/RootLayout";
-import EmployeeList from "./pages/EmployeeList";
+import EmployeeDB from "./pages/EmployeeDB";
 import Home from "./pages/Home";
 
 import NotFound from "./pages/404";
@@ -16,8 +16,8 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        index: "/employee-list",
-        element: <EmployeeList />,
+        path: "/employee-database",
+        element: <EmployeeDB />,
       },
 
       {

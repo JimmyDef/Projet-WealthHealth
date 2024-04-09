@@ -1,0 +1,48 @@
+@import "./../sass/utils/variables-mixin";
+
+.create-form {
+  margin: 0 auto;
+  padding: 50px 0;
+  display: grid;
+  width: 700px;
+  grid-template-columns: 240px 240px;
+  gap: 100px;
+  justify-content: center;
+  border: 1px solid $color-secondary;
+  border-radius: 5px;
+  box-shadow: rgba(147, 173, 24, 0.4) 5px 5px, rgba(147, 173, 24, 0.3) 10px 10px,
+    rgba(147, 173, 24, 0.2) 15px 15px, rgba(147, 173, 24, 0.1) 20px 20px,
+    rgba(147, 173, 24, 0.05) 25px 25px;
+  h2 {
+    margin-bottom: 20px;
+  }
+  label {
+    margin-bottom: 5px;
+  }
+}
+// section {
+//   justify-self: center;
+// }
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  height: 50px;
+}
+
+.submit-btn {
+  width: 220px;
+  height: 40px;
+  align-self: flex-end;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  cursor: pointer;
+  color: $color-white;
+  background-color: $color-secondary;
+  border: none;
+  border-radius: 5px;
+  transition: all 250ms;
+  &:hover {
+    transform: scale(1.05);
+    background-color: $color-primary;
+  }
+}
