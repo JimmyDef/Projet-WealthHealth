@@ -1,4 +1,5 @@
 import "./employeeDB.scss";
+import PropTypes from "prop-types";
 // import { useState } from "react";
 
 // CSS Modules, react-datepicker-cssmodules.css

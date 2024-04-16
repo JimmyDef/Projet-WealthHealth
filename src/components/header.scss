@@ -1,7 +1,9 @@
 @import "./../sass/utils/variables-mixin";
 .header {
+  display: block;
   height: 100px;
-  margin: 0 auto 60px;
+  margin: 10px auto 60px;
+  padding: 0 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -49,7 +51,7 @@
       text-decoration: underline;
     }
     &.active {
-      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      box-shadow: $box-shadow-primary;
       cursor: pointer;
       color: $color-white;
       background-color: $color-primary;

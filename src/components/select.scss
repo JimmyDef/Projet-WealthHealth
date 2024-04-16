@@ -1,0 +1,109 @@
+@import "./../sass/utils/variables-mixin";
+
+.SelectTrigger {
+  height: 36px;
+  font-weight: 500;
+  border: black 1px solid;
+  border-radius: 5px;
+  background: white;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 35px;
+  gap: 10px;
+  color: $color-secondary;
+  &:hover {
+    transform: scale(1.009);
+    box-shadow: 0px 0px 3px 0px #212529;
+  }
+}
+// .SelectTrigger:hover {
+//   background-color: var(--mauve-3);
+// }
+// .SelectTrigger:focus {
+//   box-shadow: 0 0 0 2px black;
+// }
+.SelectTrigger[data-placeholder] {
+  color: $color-secondary;
+}
+
+.SelectIcon {
+  color: $color-secondary;
+}
+
+.SelectContent {
+  max-height: var(--radix-select-content-available-height);
+  overflow: hidden;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: $box-shadow-popup;
+  z-index: 5;
+}
+
+.SelectViewport {
+  padding: 10px;
+  // z-index: 500;
+}
+
+.SelectItem {
+  font-size: 14px;
+  color: $color-secondary;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  min-height: 25px;
+  padding: 0 25px 0 35px;
+  position: relative;
+  user-select: none;
+}
+.SelectItem[data-disabled] {
+  // color: var(--mauve-8);
+  pointer-events: none;
+}
+.SelectItem[data-highlighted] {
+  outline: none;
+  background-color: $color-primary;
+  color: $color-white;
+}
+
+// .SelectLabel {
+// padding: 0 25px;
+// font-size: 12px;
+// line-height: 25px;
+// color: var(--mauve-11);
+// }
+
+// .SelectSeparator {
+// height: 1px;
+// background-color: var(--violet-6);
+// margin: 5px;
+// }
+
+.SelectItemIndicator {
+  position: absolute;
+  left: 5px;
+  width: 25px;
+  transform: scale(1.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SelectScrollButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+/* styles.css */
+.SelectContent {
+  width: var(--radix-select-trigger-width);
+  // width: 100px;
+  max-height: var(--radix-select-content-available-height);
+}

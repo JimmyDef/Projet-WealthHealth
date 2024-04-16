@@ -5,14 +5,20 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import "./datePicker.scss";
 
-const CustomDatePicker = () => {
+const CustomDatePicker = ({ id, ageControl }) => {
   const [startDate, setStartDate] = useState(null);
   const today = new Date();
+  const minDate = new Date();
+  const maxDate = new Date();
+
+  minDate.setFullYear(today.getFullYear() - 80);
+  maxDate.setFullYear(today.getFullYear() - 18);
+
   const MyContainer = ({ className, children }) => {
     return (
       <div className="pop-up-wrapper">
         <CalendarContainer className={className}>
-          <div style={{ position: "relative" }}>{children}</div>
+          <div className="pop-up-wrapper-child">{children}</div>
         </CalendarContainer>
       </div>
     );
@@ -21,6 +27,7 @@ const CustomDatePicker = () => {
     className: PropTypes.string,
     children: PropTypes.array,
   };
+
   const dayClassName = (date) => {
     if (
       startDate &&
@@ -41,11 +48,21 @@ const CustomDatePicker = () => {
       dayClassName={dayClassName}
       showIcon
       className="custom-input"
+      id={id}
       calendarContainer={MyContainer}
       selected={startDate}
+      showYearDropdown
+      showMonthDropdown
+      dropdownMode="select"
       onChange={(date) => setStartDate(date)}
+      {...(ageControl ? { minDate, maxDate } : null)}
     />
   );
 };
 
 export default CustomDatePicker;
+
+CustomDatePicker.propTypes = {
+  id: PropTypes.string,
+  ageControl: PropTypes.bool,
+};

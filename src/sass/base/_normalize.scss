@@ -199,6 +199,7 @@ button,
 [type="button"],
 [type="reset"],
 [type="submit"] {
+  appearance: button;
   -webkit-appearance: button;
 }
 
@@ -291,6 +292,7 @@ textarea {
  */
 
 [type="search"] {
+  appearance: button; /* Adding standard property for compatibility */
   -webkit-appearance: textfield; /* 1 */
   outline-offset: -2px; /* 2 */
 }
@@ -309,6 +311,7 @@ textarea {
  */
 
 ::-webkit-file-upload-button {
+  appearance: button; /* Adding standard property for compatibility */
   -webkit-appearance: button; /* 1 */
   font: inherit; /* 2 */
 }
