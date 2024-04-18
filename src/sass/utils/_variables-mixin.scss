@@ -15,3 +15,9 @@ $box-shadow-popup: 0px 10px 38px -10px rgb(90, 111, 8),
 $box-shadow-form: rgba(147, 173, 24, 0.4) 5px 5px,
   rgba(147, 173, 24, 0.3) 10px 10px, rgba(147, 173, 24, 0.2) 15px 15px,
   rgba(147, 173, 24, 0.1) 20px 20px, rgba(147, 173, 24, 0.05) 25px 25px;
+
+@mixin input-error-warning {
+  border: red 1px solid;
+
+  box-shadow: rgb(255, 0, 0) 0px 0px 7px 0px inset;
+}

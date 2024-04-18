@@ -1,11 +1,24 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-export const formSlice = createSlice({
-  name: "form",
-  initialState: {},
-  reducers: {},
-});
+import { employeesSlice, formSlice } from "./reducers";
+import { configureStore } from "@reduxjs/toolkit";
+
+const employeesConfig = {
+  key: "employees",
+  version: 1,
+  storage,
+};
+
+const persistedReducer = persistReducer(
+  employeesConfig,
+  employeesSlice.reducer
+);
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    employees: persistedReducer,
+    form: formSlice.reducer,
+  },
 });
+export const persistor = persistStore(store);

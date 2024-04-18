@@ -10,7 +10,14 @@ import React from "react";
 
 import PropTypes from "prop-types";
 
-const SelectDropdown = ({ selectorOptions, label, orientation }) => {
+const SelectDropdown = ({
+  selectorOptions,
+  label,
+  orientation,
+  emptyInputError,
+  state,
+  setState,
+}) => {
   const SelectItem = React.forwardRef(
     ({ children, className, ...props }, forwardedRef) => {
       return (
@@ -34,8 +41,13 @@ const SelectDropdown = ({ selectorOptions, label, orientation }) => {
   SelectItem.displayName = "SelectItem";
 
   return (
-    <Select.Root>
-      <Select.Trigger className="SelectTrigger" aria-label="Food" id={label}>
+    <Select.Root value={state} onValueChange={setState}>
+      <Select.Trigger
+        className={`SelectTrigger ${
+          emptyInputError && !state ? "error-warning" : ""
+        }`}
+        aria-label="Food"
+        id={label}>
         <Select.Value placeholder="- - -" />
         <Select.Icon className="SelectIcon">
           <ChevronDownIcon />
@@ -44,7 +56,8 @@ const SelectDropdown = ({ selectorOptions, label, orientation }) => {
       <Select.Portal>
         <Select.Content
           className="SelectContent"
-          position="popper"
+          // position="popper"
+          position="dropdown"
           side={orientation}
           sideOffset={5}
           avoidCollisions={false}
@@ -75,5 +88,8 @@ SelectDropdown.propTypes = {
   selectorOptions: PropTypes.array,
   label: PropTypes.string,
   orientation: PropTypes.string,
+  emptyInputError: PropTypes.bool,
+  state: PropTypes.string,
+  setState: PropTypes.func,
 };
 export default SelectDropdown;

@@ -8,27 +8,32 @@ import departmentsList from "./../assets/departmentsList.json";
 const Home = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  // const [dateOfBirth, setDateOfBirth] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState(undefined);
+  const [startDate, setStartDate] = useState(undefined);
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
-  // const [stateUS, setState] = useState("");
+  const [stateUS, setStateUS] = useState("");
   const [zipCode, setZipCode] = useState("");
-  // const [department, setDepartment] = useState("");
+  const [department, setDepartment] = useState("");
+  const [emptyInputError, setEmptyInputError] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log({
+    const employeesInfo = {
       firstName,
       lastName,
-      // dateOfBirth,
-      // startDate,
+      dateOfBirth,
       street,
       city,
-      // stateUS,
+      stateUS,
       zipCode,
-      // department,
-    });
+      department,
+    };
+
+    if (Object.values(employeesInfo).includes("" || undefined)) {
+      setEmptyInputError(true);
+      return;
+    }
   };
 
   return (
@@ -39,7 +44,9 @@ const Home = () => {
         <div className="input-wrapper">
           <label htmlFor="firstName">First Name</label>
           <input
-            className="input-fields"
+            className={`input-fields ${
+              emptyInputError && !firstName ? "error-warning" : ""
+            }`}
             type="text"
             id="firstName"
             value={firstName}
@@ -50,7 +57,9 @@ const Home = () => {
         <div className="input-wrapper">
           <label htmlFor="lastName">Last Name</label>
           <input
-            className="input-fields"
+            className={`input-fields ${
+              emptyInputError && !lastName ? "error-warning" : ""
+            }`}
             type="text"
             id="lastName"
             value={lastName}
@@ -60,12 +69,24 @@ const Home = () => {
         {/* Champ Date of Birth */}
         <div className="input-wrapper">
           <label htmlFor="dateOfBirth">Date of Birth</label>
-          <CustomDatePicker id="dateOfBirth" ageControl={true} />
+          <CustomDatePicker
+            id="dateOfBirth"
+            ageControl={true}
+            emptyInputError={emptyInputError}
+            state={dateOfBirth}
+            setState={setDateOfBirth}
+          />
         </div>
         {/* Champ Start Date */}
         <div className="input-wrapper">
           <label htmlFor="startDate">Start Date</label>
-          <CustomDatePicker id="startDate" ageControl={false} />
+          <CustomDatePicker
+            id="startDate"
+            ageControl={false}
+            emptyInputError={emptyInputError}
+            state={startDate}
+            setState={setStartDate}
+          />
         </div>
       </section>
       <section className="adress-section">
@@ -75,7 +96,9 @@ const Home = () => {
         <div className="input-wrapper">
           <label htmlFor="street">Street</label>
           <input
-            className="input-fields "
+            className={`input-fields ${
+              emptyInputError && !street ? "error-warning" : ""
+            }`}
             type="text"
             id="street"
             value={street}
@@ -88,7 +111,9 @@ const Home = () => {
           <input
             type="text"
             id="city"
-            className="input-fields "
+            className={`input-fields ${
+              emptyInputError && !city ? "error-warning" : ""
+            }`}
             value={city}
             onChange={(e) => setCity(e.target.value)}
           />
@@ -100,13 +125,18 @@ const Home = () => {
             selectorOptions={countriesList}
             label="statesList"
             orientation="bottom"
+            emptyInputError={emptyInputError}
+            state={stateUS}
+            setState={setStateUS}
           />
         </div>
         {/* Champ Zip Code */}
         <div className="input-wrapper">
           <label htmlFor="zipCode">Zip Code</label>
           <input
-            className="input-fields "
+            className={`input-fields ${
+              emptyInputError && !zipCode ? "error-warning" : ""
+            }`}
             type="text"
             id="zipCode"
             value={zipCode}
@@ -122,7 +152,10 @@ const Home = () => {
           <SelectDropdown
             selectorOptions={departmentsList}
             label="departmentsList"
-            orientation="top"
+            orientation="bottom"
+            emptyInputError={emptyInputError}
+            state={department}
+            setState={setDepartment}
           />
         </div>
       </section>
