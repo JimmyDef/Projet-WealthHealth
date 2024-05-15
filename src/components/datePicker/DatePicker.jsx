@@ -1,5 +1,4 @@
-import DatePicker from "react-datepicker";
-import { CalendarContainer } from "react-datepicker";
+import DatePicker, { CalendarContainer } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import PropTypes from "prop-types";
 import "./datePicker.scss";
@@ -10,6 +9,8 @@ const CustomDatePicker = ({
   emptyInputError,
   state: startDate,
   setState,
+  setIsDatePickerOpen: setIsOpen,
+  isDatePickerOpen: isOpen,
 }) => {
   const today = new Date();
   const minDate = new Date();
@@ -46,6 +47,10 @@ const CustomDatePicker = ({
     if (startDate && date.toDateString() === startDate.toDateString())
       return "selected-day";
   };
+  const handleDateChange = (date) => {
+    setState(date);
+    setIsOpen(false);
+  };
   return (
     <DatePicker
       dayClassName={dayClassName}
@@ -55,11 +60,16 @@ const CustomDatePicker = ({
       }`}
       id={id}
       calendarContainer={MyContainer}
+      autoComplete="off"
       selected={startDate}
       showYearDropdown
       showMonthDropdown
+      closeOnScroll={true}
       dropdownMode="select"
-      onChange={(date) => setState(date)}
+      onChange={handleDateChange}
+      onFocus={() => setIsOpen(true)}
+      onBlur={() => setIsOpen(false)}
+      open={isOpen}
       {...(ageControl ? { minDate, maxDate } : null)}
     />
   );
@@ -73,4 +83,6 @@ CustomDatePicker.propTypes = {
   emptyInputError: PropTypes.bool,
   state: PropTypes.instanceOf(Date),
   setState: PropTypes.func,
+  isDatePickerOpen: PropTypes.bool,
+  setIsDatePickerOpen: PropTypes.func,
 };

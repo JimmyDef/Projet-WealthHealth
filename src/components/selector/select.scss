@@ -1,4 +1,4 @@
-@import "./../sass/utils/variables-mixin";
+@import "./../../sass/utils/variables-mixin";
 
 .SelectTrigger {
   height: 36px;
@@ -19,16 +19,15 @@
     @include input-error-warning;
   }
   &:hover {
-    transform: scale(1.009);
-    box-shadow: 0px 0px 3px 0px #212529;
+    box-shadow: $color-primary 2px 2px 10px 1px;
+  }
+  &:focus {
+    border: solid 2px $color-primary;
+    box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 3px;
+    transition: all 00ms;
   }
 }
-// .SelectTrigger:hover {
-//   background-color: var(--mauve-3);
-// }
-// .SelectTrigger:focus {
-//   box-shadow: 0 0 0 2px black;
-// }
+
 .SelectTrigger[data-placeholder] {
   color: $color-secondary;
 }
@@ -84,7 +83,9 @@
 // background-color: var(--violet-6);
 // margin: 5px;
 // }
-
+#stateUS {
+  pointer-events: all;
+}
 .SelectItemIndicator {
   position: absolute;
   left: 5px;

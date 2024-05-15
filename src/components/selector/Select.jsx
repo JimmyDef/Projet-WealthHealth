@@ -7,7 +7,6 @@ import {
 } from "@radix-ui/react-icons";
 import "./select.scss";
 import React from "react";
-
 import PropTypes from "prop-types";
 
 const SelectDropdown = ({
@@ -17,6 +16,8 @@ const SelectDropdown = ({
   emptyInputError,
   state,
   setState,
+  setIsStartDatePickerOpen,
+  setIsBirthDatePickerOpen,
 }) => {
   const SelectItem = React.forwardRef(
     ({ children, className, ...props }, forwardedRef) => {
@@ -33,20 +34,23 @@ const SelectDropdown = ({
       );
     }
   );
-
+  SelectItem.displayName = "SelectItem";
   SelectItem.propTypes = {
     className: PropTypes.string,
     children: PropTypes.string,
   };
-  SelectItem.displayName = "SelectItem";
 
   return (
     <Select.Root value={state} onValueChange={setState}>
       <Select.Trigger
+        onClick={() => {
+          console.log("onClick select.trigger");
+          setIsStartDatePickerOpen(false);
+          setIsBirthDatePickerOpen(false);
+        }}
         className={`SelectTrigger ${
           emptyInputError && !state ? "error-warning" : ""
         }`}
-        aria-label="Food"
         id={label}>
         <Select.Value placeholder="- - -" />
         <Select.Icon className="SelectIcon">
@@ -56,7 +60,6 @@ const SelectDropdown = ({
       <Select.Portal>
         <Select.Content
           className="SelectContent"
-          // position="popper"
           position="dropdown"
           side={orientation}
           sideOffset={5}
@@ -91,5 +94,8 @@ SelectDropdown.propTypes = {
   emptyInputError: PropTypes.bool,
   state: PropTypes.string,
   setState: PropTypes.func,
+  setIsStartDatePickerOpen: PropTypes.func,
+  setIsBirthDatePickerOpen: PropTypes.func,
 };
+
 export default SelectDropdown;

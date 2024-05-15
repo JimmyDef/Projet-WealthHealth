@@ -1,19 +1,23 @@
 @import "./../sass/utils/variables-mixin";
 
 .create-form {
+  *:focus-visible {
+    outline: none;
+  }
   font-size: 16px;
   font-weight: 500;
   background-color: rgba(128, 128, 128, 0.05);
   margin: 0 auto;
-  padding: 50px 0;
+  padding: 30px 0;
   display: grid;
   max-width: 700px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 50px 0;
+  grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+  gap: 30px 0;
   border: 1px solid $color-secondary;
   border-radius: 5px;
   box-shadow: $box-shadow-form;
   h2 {
+    text-align: center;
     margin-bottom: 20px;
   }
   label {
@@ -27,7 +31,7 @@ section {
   display: flex;
   flex-direction: column;
   width: 230px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-weight: 400;
   font-size: 14px;
 }
@@ -42,12 +46,17 @@ section {
   font-size: 16px;
   font-weight: 500;
   color: $color-secondary;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
   &.error-warning {
     @include input-error-warning;
   }
   &:hover {
-    transform: scale(1.009);
-    box-shadow: 0px 0px 3px 0px #212529;
+    box-shadow: $color-primary 2px 2px 10px 1px;
+  }
+  &:focus {
+    border: solid 2px $color-primary;
+    box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 3px;
+    transition: all 00ms;
   }
 }
 .submit-btn {
@@ -66,14 +75,15 @@ section {
     transform: scale(1.05);
     background-color: $color-primary;
   }
+  &:focus {
+    background-color: $color-primary;
+    border: solid 1px black;
+  }
 }
 
 @media all and (max-width: 680px) {
   .create-form {
     max-width: 450px;
-    gap: 50px 0;
-    h2 {
-      margin-bottom: 15px;
-    }
+    gap: 30px 0;
   }
 }

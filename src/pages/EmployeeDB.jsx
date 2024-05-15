@@ -1,12 +1,14 @@
 import "./employeeDB.scss";
-import PropTypes from "prop-types";
-// import { useState } from "react";
+// import PropTypes from "prop-types";
 
-// CSS Modules, react-datepicker-cssmodules.css
-// import 'react-datepicker/dist/react-datepicker-cssmodules.css';
-
+import EmployeesDataTable from "../components/dataTable/DataTable";
 const EmployeeDB = () => {
-  return <div>EmployeeDB</div>;
+  return (
+    <div className="table-container">
+      <h2 className="header-title"> Current Employees </h2>
+      <EmployeesDataTable />
+    </div>
+  );
 };
 
 export default EmployeeDB;

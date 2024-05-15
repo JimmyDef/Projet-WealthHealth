@@ -1,8 +1,8 @@
-@import "./../sass/utils/variables-mixin";
+@import "./../../sass/utils/variables-mixin";
+
 .header {
-  display: block;
   height: 100px;
-  margin: 10px auto 60px;
+  margin: 15px auto 60px;
   padding: 0 30px;
   display: flex;
   align-items: center;
@@ -14,7 +14,6 @@
   }
   img {
     width: 100px;
-    flex: 1;
   }
   h1 {
     width: 33%;
@@ -26,6 +25,7 @@
 .nav {
   height: 100%;
   width: 33%;
+  margin-left: auto;
 
   ul {
     height: 100%;
@@ -50,6 +50,7 @@
     &:hover {
       text-decoration: underline;
     }
+
     &.active {
       box-shadow: $box-shadow-primary;
       cursor: pointer;
@@ -57,6 +58,60 @@
       background-color: $color-primary;
       &:hover {
         text-decoration: none;
+      }
+    }
+  }
+}
+@media screen and (max-width: 800px) {
+  .header {
+    .img-wrapper {
+      width: 50px;
+    }
+    img {
+      width: 50px;
+    }
+    h1 {
+      text-align: left;
+      margin: 0;
+    }
+  }
+  .nav {
+    ul {
+      li {
+        height: 50px;
+        // margin-left: 0;
+      }
+    }
+  }
+}
+@media screen and (max-width: 530px) {
+  .header {
+    position: relative;
+    flex-wrap: wrap;
+    .img-wrapper {
+      width: 50%;
+      position: absolute;
+      top: 0;
+    }
+    img {
+      width: 50px;
+    }
+    h1 {
+      width: 100%;
+      margin: 0 auto;
+      text-align: center;
+    }
+  }
+  .nav {
+    width: 100%;
+
+    ul {
+      justify-content: center;
+      gap: 20px;
+
+      li {
+        height: 50px;
+        margin-left: 0;
       }
     }
   }

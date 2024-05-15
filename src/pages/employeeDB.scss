@@ -1,0 +1,22 @@
+.table-container {
+  display: grid;
+  grid-template:
+    "Title Title"
+    "pagination search "
+    "tableBody tableBody";
+  .header-title {
+    margin: 0 0 20px;
+    font-size: 24px;
+    font-weight: 500;
+    grid-area: Title;
+  }
+  header {
+    grid-area: search;
+  }
+  > :nth-child(3) {
+    grid-area: tableBody;
+  }
+  > :nth-child(4) {
+    grid-area: pagination;
+  }
+}

@@ -1,4 +1,4 @@
-@import "./../sass/utils/variables-mixin";
+@import "./../../sass/utils/variables-mixin";
 
 .custom-input {
   width: 100%;
@@ -14,8 +14,12 @@
     @include input-error-warning;
   }
   &:hover {
-    transform: scale(1.009);
-    box-shadow: 0px 0px 3px 0px #212529;
+    box-shadow: $color-primary 2px 2px 10px 1px;
+  }
+  &:focus {
+    border: solid 2px $color-primary;
+    box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 3px;
+    transition: all 00ms;
   }
 }
 .react-datepicker__input-container .react-datepicker__calendar-icon {
@@ -86,4 +90,18 @@
 
 .pop-up-wrapper-child {
   position: relative;
+}
+.react-datepicker__day--disabled,
+.react-datepicker__month-text--disabled,
+.react-datepicker__quarter-text--disabled,
+.react-datepicker__year-text--disabled {
+  color: #ccc;
+  background-color: unset;
+}
+.react-datepicker__day--disabled:hover,
+.react-datepicker__month-text--disabled,
+.react-datepicker__quarter-text--disabled,
+.react-datepicker__year-text--disabled:hover {
+  color: #ccc;
+  background-color: unset;
 }

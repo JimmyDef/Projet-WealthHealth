@@ -6,12 +6,17 @@ For futur modification concerning imported components
 
 https://reactdatepicker.com/
 
-## radix-ui-dropdown-Select-list
+## Radix-ui-dropdown-Select-list
 
 [get-started](https://www.radix-ui.com/primitives/docs/overview/getting-started)
 [select-API-reference](https://www.radix-ui.com/primitives/docs/components/select)
 
-## TABLES
+## TABLE
+
+## Tooltips
+
+https://www.npmjs.com/package/react-tooltip
+https://react-tooltip.com/
 
 # React + Vite
 

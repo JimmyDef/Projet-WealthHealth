@@ -1,167 +1,205 @@
 import { useState } from "react";
 import "./home.scss";
-import CustomDatePicker from "./../components/DatePicker";
-import SelectDropdown from "../components/Select";
+import CustomDatePicker from "../components/datePicker/DatePicker";
+import SelectDropdown from "../components/selector/Select";
 import countriesList from "./../assets/countriesList.json";
 import departmentsList from "./../assets/departmentsList.json";
+import { useDispatch } from "react-redux";
+import { addEmployeeInfos } from "./../redux/reducers";
+import { v4 as uuidv4 } from "uuid";
 
 const Home = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState(undefined);
-  const [startDate, setStartDate] = useState(undefined);
-  const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
-  const [stateUS, setStateUS] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [department, setDepartment] = useState("");
+  const dispatch = useDispatch();
+
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    dateOfBirth: undefined,
+    startDate: undefined,
+    street: "",
+    city: "",
+    stateUS: "",
+    zipCode: "",
+    department: "",
+  });
   const [emptyInputError, setEmptyInputError] = useState(false);
+  const [isBirthDatePickerOpen, setIsBirthDatePickerOpen] = useState(false);
+  const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const employeesInfo = {
-      firstName,
-      lastName,
-      dateOfBirth,
-      street,
-      city,
-      stateUS,
-      zipCode,
-      department,
-    };
 
-    if (Object.values(employeesInfo).includes("" || undefined)) {
+    if (
+      Object.values(formData).some(
+        (value) => value === "" || value === undefined
+      )
+    ) {
       setEmptyInputError(true);
       return;
     }
+
+    const employeesInfo = {
+      ...formData,
+      dateOfBirth: formData.dateOfBirth.toLocaleDateString("fr"),
+      startDate: formData.startDate.toLocaleDateString("fr"),
+      id: uuidv4(),
+    };
+
+    dispatch(addEmployeeInfos(employeesInfo));
+    setFormData({
+      firstName: "",
+      lastName: "",
+      dateOfBirth: undefined,
+      startDate: undefined,
+      street: "",
+      city: "",
+      stateUS: "",
+      zipCode: "",
+      department: "",
+    });
+    setEmptyInputError(false);
   };
 
   return (
     <form onSubmit={handleSubmit} className="create-form">
       <section className="personal-section">
         <h2>Personal Information</h2>
-        {/* Champ First Name */}
         <div className="input-wrapper">
           <label htmlFor="firstName">First Name</label>
           <input
+            autoComplete="off"
             className={`input-fields ${
-              emptyInputError && !firstName ? "error-warning" : ""
+              emptyInputError && !formData.firstName ? "error-warning" : ""
             }`}
             type="text"
             id="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
           />
         </div>
-        {/* Champ Last Name */}
         <div className="input-wrapper">
           <label htmlFor="lastName">Last Name</label>
           <input
             className={`input-fields ${
-              emptyInputError && !lastName ? "error-warning" : ""
+              emptyInputError && !formData.lastName ? "error-warning" : ""
             }`}
             type="text"
             id="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            autoComplete="off"
           />
         </div>
-        {/* Champ Date of Birth */}
         <div className="input-wrapper">
           <label htmlFor="dateOfBirth">Date of Birth</label>
           <CustomDatePicker
+            isDatePickerOpen={isBirthDatePickerOpen}
+            setIsDatePickerOpen={setIsBirthDatePickerOpen}
             id="dateOfBirth"
             ageControl={true}
             emptyInputError={emptyInputError}
-            state={dateOfBirth}
-            setState={setDateOfBirth}
+            state={formData.dateOfBirth}
+            setState={(date) => setFormData({ ...formData, dateOfBirth: date })}
           />
         </div>
-        {/* Champ Start Date */}
         <div className="input-wrapper">
           <label htmlFor="startDate">Start Date</label>
           <CustomDatePicker
+            isDatePickerOpen={isStartDatePickerOpen}
+            setIsDatePickerOpen={setIsStartDatePickerOpen}
             id="startDate"
             ageControl={false}
             emptyInputError={emptyInputError}
-            state={startDate}
-            setState={setStartDate}
+            state={formData.startDate}
+            setState={(date) => setFormData({ ...formData, startDate: date })}
           />
         </div>
       </section>
       <section className="adress-section">
-        {/* Section Adresse */}
         <h2>Address Information</h2>
-        {/* Champ Street */}
         <div className="input-wrapper">
           <label htmlFor="street">Street</label>
           <input
             className={`input-fields ${
-              emptyInputError && !street ? "error-warning" : ""
+              emptyInputError && !formData.street ? "error-warning" : ""
             }`}
             type="text"
             id="street"
-            value={street}
-            onChange={(e) => setStreet(e.target.value)}
+            name="street"
+            value={formData.street}
+            onChange={handleChange}
+            autoComplete="off"
           />
         </div>
-        {/* Champ City */}
         <div className="input-wrapper">
           <label htmlFor="city">City</label>
           <input
             type="text"
             id="city"
+            name="city"
             className={`input-fields ${
-              emptyInputError && !city ? "error-warning" : ""
+              emptyInputError && !formData.city ? "error-warning" : ""
             }`}
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
+            value={formData.city}
+            onChange={handleChange}
+            autoComplete="off"
           />
         </div>
-        {/* Champ State */}
         <div className="input-wrapper" id="state-wrapper">
-          <label htmlFor="statesList">State</label>
+          <label htmlFor="stateUS">State</label>
           <SelectDropdown
+            setIsStartDatePickerOpen={setIsStartDatePickerOpen}
+            setIsBirthDatePickerOpen={setIsBirthDatePickerOpen}
             selectorOptions={countriesList}
-            label="statesList"
+            label="stateUS"
             orientation="bottom"
             emptyInputError={emptyInputError}
-            state={stateUS}
-            setState={setStateUS}
+            state={formData.stateUS}
+            setState={(value) => setFormData({ ...formData, stateUS: value })}
           />
         </div>
-        {/* Champ Zip Code */}
         <div className="input-wrapper">
           <label htmlFor="zipCode">Zip Code</label>
           <input
             className={`input-fields ${
-              emptyInputError && !zipCode ? "error-warning" : ""
+              emptyInputError && !formData.zipCode ? "error-warning" : ""
             }`}
             type="text"
             id="zipCode"
-            value={zipCode}
-            onChange={(e) => setZipCode(e.target.value)}
+            name="zipCode"
+            value={formData.zipCode}
+            onChange={handleChange}
+            autoComplete="off"
           />
         </div>
       </section>
       <section className="department-section">
-        {/* Section departement */}
         <h2>Job Information</h2>
-        <div className="input-wrapper">
-          <label htmlFor="departmentsList">Department</label>
+        <div className="input-wrapper" id="departement-wrapper">
+          <label htmlFor="department">Department</label>
           <SelectDropdown
+            setIsStartDatePickerOpen={setIsStartDatePickerOpen}
+            setIsBirthDatePickerOpen={setIsBirthDatePickerOpen}
             selectorOptions={departmentsList}
-            label="departmentsList"
+            label="department"
             orientation="bottom"
             emptyInputError={emptyInputError}
-            state={department}
-            setState={setDepartment}
+            state={formData.department}
+            setState={(value) =>
+              setFormData({ ...formData, department: value })
+            }
           />
         </div>
       </section>
 
-      {/* Bouton de soumission du formulaire */}
-      <button type="submit" className="submit-btn">
+      <button type="submit" className="submit-btn" tabIndex={0}>
         Save
       </button>
     </form>
