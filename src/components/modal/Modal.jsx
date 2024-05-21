@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 import styles from "./modal.module.scss";
 
-const Modal = ({ isOpen, onClose, children, title, onConfirm }) => {
+const Modal = ({ isOpen, onClose, children, title, onConfirm, toFocusRef }) => {
   useEffect(() => {
     const handleEsc = (event) => {
       if (event.key === "Escape") {
@@ -17,7 +17,6 @@ const Modal = ({ isOpen, onClose, children, title, onConfirm }) => {
     } else {
       window.removeEventListener("keydown", handleEsc);
     }
-
     return () => {
       window.removeEventListener("keydown", handleEsc);
     };
@@ -26,23 +25,27 @@ const Modal = ({ isOpen, onClose, children, title, onConfirm }) => {
   if (!isOpen) return null;
   return createPortal(
     <div
+      tabIndex={0}
       className={styles.overlay}
       onClick={onClose}
       role="dialog"
       aria-modal="true">
       <div
+        ref={toFocusRef}
+        tabIndex={0}
         className={styles.content}
-        onClick={(e) => e.stopPropagation()}
-        tabIndex={0}>
-        <h1>{title}</h1>
-        {onConfirm && (
-          <button className={styles.closeButton} onClick={onConfirm}>
-            Confirmation
+        onClick={(e) => e.stopPropagation()}>
+        <h1 id="modal-h1">{title}</h1>
+        <div className={styles.buttonWrapper}>
+          {onConfirm && (
+            <button className={styles.confirmButton} onClick={onConfirm}>
+              Confirmation
+            </button>
+          )}
+          <button className={styles.closeButton} onClick={onClose}>
+            Cancel
           </button>
-        )}
-        <button className={styles.closeButton} onClick={onClose}>
-          Cancel
-        </button>
+        </div>
         {children}
       </div>
     </div>,

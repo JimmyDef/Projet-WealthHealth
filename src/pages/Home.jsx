@@ -17,7 +17,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const saveButtonRef = useRef(null);
   // const mainContentRef = useRef(null);
-  const modalConfirmButtonRef = useRef(null);
+  const toFocusRef = useRef(null);
   /* ------------------------
   Gestion MODAL
 --------------------------- */
@@ -28,20 +28,14 @@ const Home = () => {
 
   useEffect(() => {
     const rootElement = document.getElementById("root");
-    console.log("🚀 ~ isModalOpen:", isModalOpen);
-    if (isModalOpen) {
-      modalConfirmButtonRef.current?.focus();
-      rootElement.setAttribute("aria-hidden", "true");
 
-      //  if (mainContentRef.current) {
-      //    mainContentRef.current.setAttribute("aria-hidden", "true");
-      //  }
+    if (isModalOpen) {
+      console.log("🚀 ~ toFocusRef.current:", toFocusRef.current);
+      toFocusRef.current?.focus();
+      rootElement.setAttribute("aria-hidden", "true");
     } else {
       saveButtonRef.current?.focus();
-      rootElement.setAttribute("aria-hidden", "true");
-      //  if (mainContentRef.current) {
-      //    mainContentRef.current.setAttribute("aria-hidden", "false");
-      //  }
+      rootElement.setAttribute("aria-hidden", "false");
     }
   }, [isModalOpen]);
   // ------------------------------
@@ -67,16 +61,6 @@ const Home = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (
-      Object.values(formData).some(
-        (value) => value === "" || value === undefined
-      )
-    ) {
-      setInputError(true);
-      return;
-    }
-
     const employeesInfo = {
       ...formData,
       dateOfBirth: formData.dateOfBirth.toLocaleDateString("fr"),
@@ -109,6 +93,14 @@ const Home = () => {
         aria-hidden="true"
         onSubmit={(e) => {
           e.preventDefault();
+          if (
+            Object.values(formData).some(
+              (value) => value === "" || value === undefined
+            )
+          ) {
+            setInputError(true);
+            return;
+          }
           openModal();
         }}
         className="create-form">
@@ -248,11 +240,11 @@ const Home = () => {
         </button>
       </form>
       <Modal
-        title="Create a new employee?"
+        title="Infos confirmation"
         onClose={() => closeModal()}
         onConfirm={(e) => handleSubmit(e)}
         isOpen={isModalOpen}
-        // modalConfirmButtonRef
+        toFocusRef={toFocusRef}
       />
     </>
   );

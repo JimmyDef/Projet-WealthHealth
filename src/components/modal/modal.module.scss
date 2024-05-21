@@ -8,16 +8,48 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 3;
 }
 
 .content {
-  background-color: #fff;
+  text-align: center;
+  background-color: #c0c0c0;
   padding: 20px;
   border-radius: 5px;
   position: relative;
   min-width: 300px;
   max-width: 500px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  // box-shadow: 0px 10px 38px -10px rgb(90, 111, 8),
+  //   0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+  cursor: default;
+}
+.buttonWrapper {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  button {
+    // margin: auto;
+    width: 180px;
+    height: 35px;
+    align-self: flex-end;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    cursor: pointer;
+    color: white;
+    background-color: #485806;
+    border: none;
+    border-radius: 5px;
+    transition: all 250ms;
+    &:hover {
+      transform: scale(1.05);
+      background-color: #93ad18;
+    }
+    &:focus {
+      background-color: #93ad18;
+      border: solid 1px black;
+    }
+  }
 }
 
 .closeButton {
@@ -28,4 +60,7 @@
   // border: none;
   // font-size: 1.5em;
   cursor: pointer;
+}
+
+.confirmButton {
 }
