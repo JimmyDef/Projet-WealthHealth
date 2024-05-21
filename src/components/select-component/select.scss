@@ -1,0 +1,26 @@
+@import "./../../sass/utils/variables-mixin";
+.react-select-container {
+  *:focus-visible {
+    outline: none;
+  }
+  .react-select__menu {
+    box-shadow: $box-shadow-popup;
+  }
+  .react-select__control {
+    @include input;
+    margin-bottom: 10px;
+    padding: 0 20px;
+
+    &.error-warning {
+      @include input-error-warning;
+    }
+    &:hover {
+      border: black 1px solid;
+    }
+  }
+}
+.react-select-container.error-warning {
+  .react-select__control {
+    @include input-error-warning;
+  }
+}

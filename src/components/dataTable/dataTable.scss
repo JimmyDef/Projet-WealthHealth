@@ -23,10 +23,8 @@ div .rdt_TableHeader {
 div .rdt_TableHead {
   color: $color-primary;
 }
-
-nav.rdt_Pagination {
-  border-top: 0px;
-  padding: 0;
+div .rdt_TableCell {
+  cursor: pointer;
 }
 
 .street-tooltip {

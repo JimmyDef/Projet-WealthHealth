@@ -1,0 +1,57 @@
+@import "./../../sass/utils/variables-mixin";
+
+.pagination {
+  &__wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 430px;
+    max-width: 480px;
+    @media all and (max-width: 720px) {
+      min-width: 300px;
+    }
+  }
+  &__row-info {
+    display: flex;
+    align-items: center;
+    width: 205px;
+    @media all and (max-width: 720px) {
+      width: 90px;
+    }
+  }
+  &__row-label {
+    margin-right: 15px;
+    @media all and (max-width: 720px) {
+      display: none;
+    }
+  }
+  &__iconButton-container {
+    > :nth-child(2) {
+      margin-right: 15px;
+    }
+  }
+  &__react-select {
+    *:focus-visible {
+      outline: none;
+    }
+    .react-select-pagination__menu {
+      box-shadow: $box-shadow-popup;
+    }
+    .react-select-pagination__control {
+      @include input;
+      width: 80px;
+
+      &:hover {
+        border: black 1px solid;
+      }
+    }
+  }
+}
+
+.table-container {
+  > :nth-child(4) {
+    display: flex;
+    align-items: center;
+  }
+}

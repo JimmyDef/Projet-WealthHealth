@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import "./dataTable.scss";
 import TextField from "../searchInput/TextField";
 import { Tooltip } from "react-tooltip";
-import countriesList from "../../assets/countriesList.json";
-
+import countryList from "../../assets/countryList.json";
+import CustomMaterialPagination from "./../pagination/Pagination";
 const EmployeesDataTable = () => {
   const employeesInfo = useSelector((state) => state.employees);
   const [data, setData] = useState(employeesInfo);
@@ -37,7 +37,7 @@ const EmployeesDataTable = () => {
       selector: (row) => row.lastName,
       sortable: true,
       format: (row) => capitalizeFirstLetter(row.lastName),
-      width: "106px",
+      width: "108px",
     },
     {
       name: "Start Date",
@@ -49,6 +49,17 @@ const EmployeesDataTable = () => {
       selector: (row) => row.department,
       sortable: true,
       width: "113px",
+      cell: (row) => (
+        <div
+          onClick={() => handleClickOnRow(row)}
+          className="street-tooltip"
+          data-tooltip-content={row.department}
+          data-tooltip-id={`tooltip-${row.id}`}>
+          {row.department}
+
+          <Tooltip id={`tooltip-${row.id}`} interactive={true} />
+        </div>
+      ),
     },
     {
       name: "Date of Birth",
@@ -62,18 +73,12 @@ const EmployeesDataTable = () => {
       sortable: true,
       cell: (row) => (
         <div
-          onClick={() => {
-            const stateFullName = countriesList.find(
-              (state) => state.abbreviation === row.stateUS
-            );
-            copyToClipboard(
-              `${row.firstName} ${row.lastName}, ${row.street}, ${row.city}, ${stateFullName.name} ${row.zipCode} `
-            );
-          }}
+          onClick={() => handleClickOnRow(row)}
           className="street-tooltip"
           data-tooltip-content={row.street}
           data-tooltip-id={`tooltip-${row.id}`}>
           {row.street}
+
           <Tooltip id={`tooltip-${row.id}`} interactive={true} />
         </div>
       ),
@@ -97,7 +102,15 @@ const EmployeesDataTable = () => {
       width: "100px",
     },
   ];
-
+  const handleClickOnRow = (row) => {
+    const stateFullName = countryList.find(
+      (state) => state.abbreviation === row.stateUS
+    );
+    copyToClipboard(
+      `${row.firstName} ${row.lastName}, ${row.street}, ${row.city}, ${stateFullName} ${row.zipCode} `
+    );
+    console.log(row);
+  };
   const subHeaderComponent = (
     <div className="subHeaderComponent">
       <TextField search={search} onChange={(e) => setSearch(e.target.value)} />
@@ -118,6 +131,9 @@ const EmployeesDataTable = () => {
         subHeaderAlign="right"
         subHeaderComponent={subHeaderComponent}
         keyField="id"
+        onRowClicked={handleClickOnRow}
+        paginationComponent={CustomMaterialPagination}
+        // customStyles={customStyles}
       />
       <Tooltip effect="solid" />
     </StyleSheetManager>

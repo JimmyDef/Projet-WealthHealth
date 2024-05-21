@@ -12,6 +12,8 @@
   }
   header {
     grid-area: search;
+    width: 240px;
+    justify-self: end;
   }
   > :nth-child(3) {
     grid-area: tableBody;

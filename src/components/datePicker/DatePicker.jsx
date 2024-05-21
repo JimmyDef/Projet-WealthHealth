@@ -6,11 +6,9 @@ import "./datePicker.scss";
 const CustomDatePicker = ({
   id,
   ageControl,
-  emptyInputError,
+  inputError,
   state: startDate,
   setState,
-  setIsDatePickerOpen: setIsOpen,
-  isDatePickerOpen: isOpen,
 }) => {
   const today = new Date();
   const minDate = new Date();
@@ -29,8 +27,8 @@ const CustomDatePicker = ({
     );
   };
   MyContainer.propTypes = {
-    className: PropTypes.string,
-    children: PropTypes.array,
+    className: PropTypes.string.isRequired,
+    children: PropTypes.array.isRequired,
   };
 
   const dayClassName = (date) => {
@@ -47,16 +45,13 @@ const CustomDatePicker = ({
     if (startDate && date.toDateString() === startDate.toDateString())
       return "selected-day";
   };
-  const handleDateChange = (date) => {
-    setState(date);
-    setIsOpen(false);
-  };
+
   return (
     <DatePicker
       dayClassName={dayClassName}
       showIcon
       className={`custom-input ${
-        emptyInputError && !startDate ? "error-warning" : ""
+        inputError && !startDate ? "error-warning" : ""
       }`}
       id={id}
       calendarContainer={MyContainer}
@@ -66,10 +61,7 @@ const CustomDatePicker = ({
       showMonthDropdown
       closeOnScroll={true}
       dropdownMode="select"
-      onChange={handleDateChange}
-      onFocus={() => setIsOpen(true)}
-      onBlur={() => setIsOpen(false)}
-      open={isOpen}
+      onChange={(date) => setState(date)}
       {...(ageControl ? { minDate, maxDate } : null)}
     />
   );
@@ -78,11 +70,9 @@ const CustomDatePicker = ({
 export default CustomDatePicker;
 
 CustomDatePicker.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
   ageControl: PropTypes.bool,
-  emptyInputError: PropTypes.bool,
+  inputError: PropTypes.bool,
   state: PropTypes.instanceOf(Date),
-  setState: PropTypes.func,
-  isDatePickerOpen: PropTypes.bool,
-  setIsDatePickerOpen: PropTypes.func,
+  setState: PropTypes.func.isRequired,
 };

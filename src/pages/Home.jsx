@@ -1,15 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./home.scss";
 import CustomDatePicker from "../components/datePicker/DatePicker";
-import SelectDropdown from "../components/selector/Select";
-import countriesList from "./../assets/countriesList.json";
-import departmentsList from "./../assets/departmentsList.json";
+import countryList from "./../assets/countryList.json";
+import departmentList from "./../assets/departmentList.json";
 import { useDispatch } from "react-redux";
 import { addEmployeeInfos } from "./../redux/reducers";
 import { v4 as uuidv4 } from "uuid";
-
+import SelectComponent from "./../components/select-component/Select";
+import {
+  filterSpecialCharacters,
+  filterNonAlphabeticCharacters,
+  filterNonAlphanumericCharacters,
+} from "../util/modules";
+import Modal from "./../components/modal/Modal";
 const Home = () => {
   const dispatch = useDispatch();
+  const saveButtonRef = useRef(null);
+  // const mainContentRef = useRef(null);
+  const modalConfirmButtonRef = useRef(null);
+  /* ------------------------
+  Gestion MODAL
+--------------------------- */
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
+  useEffect(() => {
+    const rootElement = document.getElementById("root");
+    console.log("🚀 ~ isModalOpen:", isModalOpen);
+    if (isModalOpen) {
+      modalConfirmButtonRef.current?.focus();
+      rootElement.setAttribute("aria-hidden", "true");
+
+      //  if (mainContentRef.current) {
+      //    mainContentRef.current.setAttribute("aria-hidden", "true");
+      //  }
+    } else {
+      saveButtonRef.current?.focus();
+      rootElement.setAttribute("aria-hidden", "true");
+      //  if (mainContentRef.current) {
+      //    mainContentRef.current.setAttribute("aria-hidden", "false");
+      //  }
+    }
+  }, [isModalOpen]);
+  // ------------------------------
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -18,17 +53,16 @@ const Home = () => {
     startDate: undefined,
     street: "",
     city: "",
-    stateUS: "",
+    stateUS: null,
     zipCode: "",
-    department: "",
+    department: null,
   });
-  const [emptyInputError, setEmptyInputError] = useState(false);
-  const [isBirthDatePickerOpen, setIsBirthDatePickerOpen] = useState(false);
-  const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false);
+  const [inputError, setInputError] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e, sanitizer) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const cleanedValue = sanitizer(value);
+    setFormData({ ...formData, [name]: cleanedValue });
   };
 
   const handleSubmit = (e) => {
@@ -39,7 +73,7 @@ const Home = () => {
         (value) => value === "" || value === undefined
       )
     ) {
-      setEmptyInputError(true);
+      setInputError(true);
       return;
     }
 
@@ -48,9 +82,12 @@ const Home = () => {
       dateOfBirth: formData.dateOfBirth.toLocaleDateString("fr"),
       startDate: formData.startDate.toLocaleDateString("fr"),
       id: uuidv4(),
+      stateUS: formData.stateUS.value,
+      department: formData.department.value,
     };
 
     dispatch(addEmployeeInfos(employeesInfo));
+    console.log("🚀 ~ employeesInfo:", employeesInfo);
     setFormData({
       firstName: "",
       lastName: "",
@@ -62,147 +99,162 @@ const Home = () => {
       zipCode: "",
       department: "",
     });
-    setEmptyInputError(false);
+    setInputError(false);
+    closeModal();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="create-form">
-      <section className="personal-section">
-        <h2>Personal Information</h2>
-        <div className="input-wrapper">
-          <label htmlFor="firstName">First Name</label>
-          <input
-            autoComplete="off"
-            className={`input-fields ${
-              emptyInputError && !formData.firstName ? "error-warning" : ""
-            }`}
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="input-wrapper">
-          <label htmlFor="lastName">Last Name</label>
-          <input
-            className={`input-fields ${
-              emptyInputError && !formData.lastName ? "error-warning" : ""
-            }`}
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            autoComplete="off"
-          />
-        </div>
-        <div className="input-wrapper">
-          <label htmlFor="dateOfBirth">Date of Birth</label>
-          <CustomDatePicker
-            isDatePickerOpen={isBirthDatePickerOpen}
-            setIsDatePickerOpen={setIsBirthDatePickerOpen}
-            id="dateOfBirth"
-            ageControl={true}
-            emptyInputError={emptyInputError}
-            state={formData.dateOfBirth}
-            setState={(date) => setFormData({ ...formData, dateOfBirth: date })}
-          />
-        </div>
-        <div className="input-wrapper">
-          <label htmlFor="startDate">Start Date</label>
-          <CustomDatePicker
-            isDatePickerOpen={isStartDatePickerOpen}
-            setIsDatePickerOpen={setIsStartDatePickerOpen}
-            id="startDate"
-            ageControl={false}
-            emptyInputError={emptyInputError}
-            state={formData.startDate}
-            setState={(date) => setFormData({ ...formData, startDate: date })}
-          />
-        </div>
-      </section>
-      <section className="adress-section">
-        <h2>Address Information</h2>
-        <div className="input-wrapper">
-          <label htmlFor="street">Street</label>
-          <input
-            className={`input-fields ${
-              emptyInputError && !formData.street ? "error-warning" : ""
-            }`}
-            type="text"
-            id="street"
-            name="street"
-            value={formData.street}
-            onChange={handleChange}
-            autoComplete="off"
-          />
-        </div>
-        <div className="input-wrapper">
-          <label htmlFor="city">City</label>
-          <input
-            type="text"
-            id="city"
-            name="city"
-            className={`input-fields ${
-              emptyInputError && !formData.city ? "error-warning" : ""
-            }`}
-            value={formData.city}
-            onChange={handleChange}
-            autoComplete="off"
-          />
-        </div>
-        <div className="input-wrapper" id="state-wrapper">
-          <label htmlFor="stateUS">State</label>
-          <SelectDropdown
-            setIsStartDatePickerOpen={setIsStartDatePickerOpen}
-            setIsBirthDatePickerOpen={setIsBirthDatePickerOpen}
-            selectorOptions={countriesList}
-            label="stateUS"
-            orientation="bottom"
-            emptyInputError={emptyInputError}
-            state={formData.stateUS}
-            setState={(value) => setFormData({ ...formData, stateUS: value })}
-          />
-        </div>
-        <div className="input-wrapper">
-          <label htmlFor="zipCode">Zip Code</label>
-          <input
-            className={`input-fields ${
-              emptyInputError && !formData.zipCode ? "error-warning" : ""
-            }`}
-            type="text"
-            id="zipCode"
-            name="zipCode"
-            value={formData.zipCode}
-            onChange={handleChange}
-            autoComplete="off"
-          />
-        </div>
-      </section>
-      <section className="department-section">
-        <h2>Job Information</h2>
-        <div className="input-wrapper" id="departement-wrapper">
-          <label htmlFor="department">Department</label>
-          <SelectDropdown
-            setIsStartDatePickerOpen={setIsStartDatePickerOpen}
-            setIsBirthDatePickerOpen={setIsBirthDatePickerOpen}
-            selectorOptions={departmentsList}
-            label="department"
-            orientation="bottom"
-            emptyInputError={emptyInputError}
-            state={formData.department}
-            setState={(value) =>
-              setFormData({ ...formData, department: value })
-            }
-          />
-        </div>
-      </section>
+    <>
+      <form
+        aria-hidden="true"
+        onSubmit={(e) => {
+          e.preventDefault();
+          openModal();
+        }}
+        className="create-form">
+        <section className="personal-section">
+          <h2>Personal Information</h2>
+          <div className="input-wrapper">
+            <label htmlFor="firstName">First Name</label>
+            <input
+              autoComplete="off"
+              className={`input-fields ${
+                inputError && !formData.firstName ? "error-warning" : ""
+              }`}
+              type="text"
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
+              onChange={(e) => handleChange(e, filterNonAlphabeticCharacters)}
+            />
+          </div>
+          <div className="input-wrapper">
+            <label htmlFor="lastName">Last Name</label>
+            <input
+              className={`input-fields ${
+                inputError && !formData.lastName ? "error-warning" : ""
+              }`}
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={(e) => handleChange(e, filterNonAlphabeticCharacters)}
+              autoComplete="off"
+            />
+          </div>
+          <div className="input-wrapper">
+            <label htmlFor="dateOfBirth">Date of Birth</label>
+            <CustomDatePicker
+              id="dateOfBirth"
+              ageControl={true}
+              inputError={inputError}
+              state={formData.dateOfBirth}
+              setState={(date) =>
+                setFormData({ ...formData, dateOfBirth: date })
+              }
+            />
+          </div>
+          <div className="input-wrapper">
+            <label htmlFor="startDate">Start Date</label>
+            <CustomDatePicker
+              id="startDate"
+              ageControl={false}
+              inputError={inputError}
+              state={formData.startDate}
+              setState={(date) => setFormData({ ...formData, startDate: date })}
+            />
+          </div>
+        </section>
+        <section className="adress-section">
+          <h2>Address Information</h2>
+          <div className="input-wrapper">
+            <label htmlFor="street">Street</label>
+            <input
+              className={`input-fields ${
+                inputError && !formData.street ? "error-warning" : ""
+              }`}
+              type="text"
+              id="street"
+              name="street"
+              value={formData.street}
+              onChange={(e) => handleChange(e, filterNonAlphanumericCharacters)}
+              autoComplete="off"
+            />
+          </div>
+          <div className="input-wrapper">
+            <label htmlFor="city">City</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              className={`input-fields ${
+                inputError && !formData.city ? "error-warning" : ""
+              }`}
+              value={formData.city}
+              onChange={(e) => handleChange(e, filterNonAlphabeticCharacters)}
+              autoComplete="off"
+            />
+          </div>
+          <div className="input-wrapper" id="state-wrapper">
+            <label htmlFor="stateUS">State</label>
+            <SelectComponent
+              inputError={inputError}
+              listTitle="countryList"
+              id="stateUS"
+              options={countryList}
+              state={formData.stateUS}
+              setState={(value) => setFormData({ ...formData, stateUS: value })}
+            />
+          </div>
+          <div className="input-wrapper">
+            <label htmlFor="zipCode">Zip Code</label>
+            <input
+              className={`input-fields ${
+                inputError && !formData.zipCode ? "error-warning" : ""
+              }`}
+              type="text"
+              id="zipCode"
+              name="zipCode"
+              value={formData.zipCode}
+              onChange={(e) => handleChange(e, filterSpecialCharacters)}
+              autoComplete="off"
+            />
+          </div>
+        </section>
+        <section className="department-section">
+          <h2>Job Information</h2>
 
-      <button type="submit" className="submit-btn" tabIndex={0}>
-        Save
-      </button>
-    </form>
+          <div className="input-wrapper" id="departement-wrapper">
+            <label htmlFor="department">Department</label>
+            <SelectComponent
+              inputError={inputError}
+              listTitle="departmentList"
+              id="department"
+              options={departmentList}
+              state={formData.department}
+              setState={(value) =>
+                setFormData({ ...formData, department: value })
+              }
+            />
+          </div>
+        </section>
+
+        <button
+          type="submit"
+          className="submit-btn"
+          tabIndex={0}
+          ref={saveButtonRef}>
+          Save
+        </button>
+      </form>
+      <Modal
+        title="Create a new employee?"
+        onClose={() => closeModal()}
+        onConfirm={(e) => handleSubmit(e)}
+        isOpen={isModalOpen}
+        // modalConfirmButtonRef
+      />
+    </>
   );
 };
 

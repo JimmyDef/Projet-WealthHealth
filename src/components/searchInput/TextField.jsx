@@ -19,5 +19,8 @@ const TextField = ({ search, onChange }) => {
     </div>
   );
 };
-TextField.propTypes = { search: PropTypes.string, onChange: PropTypes.func };
+TextField.propTypes = {
+  search: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+};
 export default TextField;

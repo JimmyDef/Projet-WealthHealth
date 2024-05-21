@@ -1,0 +1,18 @@
+@import "./../../sass/utils/variables-mixin";
+
+.pagination {
+  &__icon-wrapper {
+    background-color: inherit;
+    border: none;
+    width: 25px;
+    color: $color-secondary;
+    margin: 0 2px;
+    cursor: pointer;
+    &:disabled {
+      color: rgba(12, 12, 12, 0.3);
+      cursor: auto;
+    }
+  }
+  &__icon {
+  }
+}

@@ -8,8 +8,7 @@ https://reactdatepicker.com/
 
 ## Radix-ui-dropdown-Select-list
 
-[get-started](https://www.radix-ui.com/primitives/docs/overview/getting-started)
-[select-API-reference](https://www.radix-ui.com/primitives/docs/components/select)
+[get-started](https://react-select.com/home#getting-started)
 
 ## TABLE
 
