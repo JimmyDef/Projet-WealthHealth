@@ -1,24 +1,47 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
-
+import { handleEsc } from "../../util/modules";
 import styles from "./modal.module.scss";
+import crossButton from "./../../assets/cross.png";
+const Modal = ({
+  isOpen,
+  onClose,
+  children,
+  title,
+  onConfirm,
+  toFocusRef,
+  showCrossButton = false,
+  showCancelButton = true,
+  closeButtonText = "Close",
+  imageCloseButton = crossButton,
+}) => {
+  Modal.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    closeButtonText: PropTypes.string,
+    showCrossButton: PropTypes.bool,
+    showCancelButton: PropTypes.bool,
+    onClose: PropTypes.func.isRequired,
+    onConfirm: PropTypes.func,
+    toFocusRef: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+    ]),
+    title: PropTypes.string.isRequired,
+    children: PropTypes.node,
+    imageCloseButton: PropTypes.string,
+  };
 
-const Modal = ({ isOpen, onClose, children, title, onConfirm, toFocusRef }) => {
   useEffect(() => {
-    const handleEsc = (event) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
+    const handleKeyDown = (event) => handleEsc(event, onClose);
 
     if (isOpen) {
-      window.addEventListener("keydown", handleEsc);
+      window.addEventListener("keydown", handleKeyDown);
     } else {
-      window.removeEventListener("keydown", handleEsc);
+      window.removeEventListener("keydown", handleKeyDown);
     }
     return () => {
-      window.removeEventListener("keydown", handleEsc);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
 
@@ -26,33 +49,48 @@ const Modal = ({ isOpen, onClose, children, title, onConfirm, toFocusRef }) => {
   return createPortal(
     <div
       tabIndex={0}
-      className={styles.overlay}
-      onClick={onClose}
+      ref={toFocusRef}
+      className={`${styles.overlay} jcm_Overlay`}
       role="dialog"
       aria-modal="true">
-      <div
-        ref={toFocusRef}
-        tabIndex={0}
-        className={styles.content}
-        onClick={(e) => e.stopPropagation()}>
-        <h1 id="modal-h1">{title}</h1>
-        <div className={styles.buttonWrapper}>
+      <div className={`${styles.content} jcm_Modal`}>
+        <h1 id="modal-h1" className="normal">
+          {title}
+        </h1>
+        <section className={`${styles.childrenSection} jcm_ChildrenSection`}>
+          {children}
+        </section>
+        <section className={`${styles.buttonSection} jcm_ButtonSection`}>
           {onConfirm && (
-            <button className={styles.confirmButton} onClick={onConfirm}>
+            <button
+              className={`${styles.confirmButton} jcm_ConfirmButton`}
+              onClick={onConfirm}>
               Confirmation
             </button>
           )}
-          <button className={styles.closeButton} onClick={onClose}>
-            Cancel
-          </button>
-        </div>
-        {children}
+          {showCancelButton && (
+            <button
+              className={`${styles.closeButton} jcm_CloseButton`}
+              onClick={onClose}>
+              {closeButtonText}
+            </button>
+          )}
+          {showCrossButton && (
+            <button
+              className={`${styles.crossButton} jcm_CrossButton`}
+              onClick={onClose}>
+              <img
+                src={imageCloseButton}
+                alt="close icon"
+                className={styles.crossImg}
+              />
+            </button>
+          )}
+        </section>
       </div>
     </div>,
     document.body
   );
 };
-
-Modal.propTypes = {};
 
 export default Modal;

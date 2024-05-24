@@ -33,3 +33,10 @@ div .rdt_TableCell {
   overflow: hidden;
   cursor: pointer;
 }
+
+.modal__text {
+  font-weight: 600;
+  font-size: 20px;
+  color: $color-secondary;
+  font-style: italic;
+}

@@ -39,12 +39,11 @@
       box-shadow: $box-shadow-popup;
     }
     .react-select-pagination__control {
-      @include input;
-      width: 80px;
+      @include input(80px, 0, 0);
 
-      &:hover {
-        border: black 1px solid;
-      }
+      // &:hover {
+
+      // }
     }
   }
 }

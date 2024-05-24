@@ -2,15 +2,22 @@ import { StyleSheetManager } from "styled-components";
 import DataTable from "react-data-table-component";
 import { useSelector } from "react-redux";
 import { capitalizeFirstLetter, copyToClipboard } from "../../util/modules";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./dataTable.scss";
 import TextField from "../searchInput/TextField";
 import { Tooltip } from "react-tooltip";
 import countryList from "../../assets/countryList.json";
 import CustomMaterialPagination from "./../pagination/Pagination";
+import Modal from "../modal/Modal";
+
 const EmployeesDataTable = () => {
   const employeesInfo = useSelector((state) => state.employees);
-  const [data, setData] = useState(employeesInfo);
+  const [employeesList, setEmployeesList] = useState(employeesInfo);
+  const [personalRecord, setPersonalRecord] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const toFocusRef = useRef(null);
 
   const [search, setSearch] = useState("");
 
@@ -21,8 +28,14 @@ const EmployeesDataTable = () => {
         value.toLocaleLowerCase().includes(searchTemLower)
       )
     );
-    setData(filtered);
+    setEmployeesList(filtered);
   }, [search, employeesInfo]);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      toFocusRef.current?.focus();
+    }
+  }, [isModalOpen]);
 
   const columns = [
     {
@@ -88,6 +101,17 @@ const EmployeesDataTable = () => {
       selector: (row) => row.city,
       sortable: true,
       format: (row) => capitalizeFirstLetter(row.city),
+      cell: (row) => (
+        <div
+          onClick={() => handleClickOnRow(row)}
+          className="street-tooltip"
+          data-tooltip-content={row.city}
+          data-tooltip-id={`tooltip-${row.id}`}>
+          {row.city}
+
+          <Tooltip id={`tooltip-${row.id}`} interactive={true} />
+        </div>
+      ),
     },
     {
       name: "State",
@@ -106,10 +130,12 @@ const EmployeesDataTable = () => {
     const stateFullName = countryList.find(
       (state) => state.abbreviation === row.stateUS
     );
-    copyToClipboard(
-      `${row.firstName} ${row.lastName}, ${row.street}, ${row.city}, ${stateFullName} ${row.zipCode} `
-    );
-    console.log(row);
+    const rowInformation = `${row.firstName} ${row.lastName}, ${row.street}, ${row.city}, ${stateFullName.name} ${row.zipCode}. `;
+
+    setPersonalRecord(rowInformation);
+    copyToClipboard(rowInformation);
+    setIsModalOpen(true);
+    console.log(rowInformation);
   };
   const subHeaderComponent = (
     <div className="subHeaderComponent">
@@ -120,23 +146,34 @@ const EmployeesDataTable = () => {
   // React data-table-component  actually create a <header> balise in the html by subHeaderComponent"
 
   return (
-    <StyleSheetManager shouldForwardProp={(prop) => prop !== "align"}>
-      <DataTable
-        columns={columns}
-        data={data}
-        dense
-        highlightOnHover
-        pagination
-        subHeader={true}
-        subHeaderAlign="right"
-        subHeaderComponent={subHeaderComponent}
-        keyField="id"
-        onRowClicked={handleClickOnRow}
-        paginationComponent={CustomMaterialPagination}
-        // customStyles={customStyles}
-      />
-      <Tooltip effect="solid" />
-    </StyleSheetManager>
+    <>
+      <StyleSheetManager shouldForwardProp={(prop) => prop !== "align"}>
+        <DataTable
+          columns={columns}
+          data={employeesList}
+          dense
+          highlightOnHover
+          pagination
+          subHeader={true}
+          subHeaderAlign="right"
+          subHeaderComponent={subHeaderComponent}
+          keyField="id"
+          onRowClicked={handleClickOnRow}
+          paginationComponent={CustomMaterialPagination}
+        />
+        <Tooltip effect="solid" />
+      </StyleSheetManager>
+      {isModalOpen ? (
+        <Modal
+          toFocusRef={toFocusRef}
+          title="Personal record"
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          showCrossButton>
+          <p className="modal__text">{personalRecord}</p>
+        </Modal>
+      ) : null}
+    </>
   );
 };
 

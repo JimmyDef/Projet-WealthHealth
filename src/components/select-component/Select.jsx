@@ -1,4 +1,4 @@
-import Select from "react-select";
+import Select, { components } from "react-select";
 import PropTypes from "prop-types";
 import { ListFormatter } from "./../../util/dataFormatters";
 import "./select.scss";
@@ -16,7 +16,7 @@ const SelectComponent = ({
   const optionStyles = {
     option: (provided, { isDisabled, isFocused, isSelected }) => {
       const activeStyle = {
-        backgroundColor: colors.primaryLight, // Changez cette couleur à votre convenance
+        backgroundColor: colors.primaryLight,
       };
       return {
         ...provided,
@@ -48,9 +48,16 @@ const SelectComponent = ({
       boxShadow:
         "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;",
     }),
-    control: (provided) => ({
+    control: (provided, { isFocused }) => ({
       ...provided,
       cursor: "pointer",
+      borderColor: isFocused ? colors.primary : provided.borderColor,
+      boxShadow: isFocused ? null : provided.boxShadow,
+      "&:hover": {
+        borderColor: isFocused
+          ? colors.primary
+          : provided["&:hover"].borderColor,
+      },
     }),
     menuList: (provided) => ({
       ...provided,
@@ -62,7 +69,9 @@ const SelectComponent = ({
     placeholder: (styles) => ({ ...styles, fontSize: "14px" }),
     singleValue: (styles) => ({ ...styles, color: colors.secondary }),
   };
-
+  const CustomInput = (props) => {
+    return <components.Input {...props} autoComplete="nope" />;
+  };
   return (
     <Select
       menuPortalTarget={document.body}
@@ -77,6 +86,7 @@ const SelectComponent = ({
       }`}
       classNamePrefix="react-select"
       styles={optionStyles}
+      components={{ Input: CustomInput }}
     />
   );
 };

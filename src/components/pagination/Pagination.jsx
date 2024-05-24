@@ -55,9 +55,16 @@ const CustomMaterialPagination = ({
       boxShadow:
         "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;",
     }),
-    control: (provided) => ({
+    control: (provided, { isFocused }) => ({
       ...provided,
       cursor: "pointer",
+      borderColor: isFocused ? colors.primary : provided.borderColor,
+      boxShadow: isFocused ? null : provided.boxShadow,
+      "&:hover": {
+        borderColor: isFocused
+          ? colors.primary
+          : provided["&:hover"].borderColor,
+      },
     }),
     menuList: (provided) => ({
       ...provided,
@@ -101,7 +108,7 @@ const CustomMaterialPagination = ({
           Rows per page:{" "}
         </label>
         <Select
-          id="rowsPerPage"
+          aria-label="rowsPerPage"
           className="pagination__react-select"
           classNamePrefix="react-select-pagination"
           value={options.find((option) => option.value === rowsPerPage)}

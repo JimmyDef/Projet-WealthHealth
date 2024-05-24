@@ -1,13 +1,13 @@
 /* ----------------------------------------------------
- Fonction formatage string majuscule 1ère lettre
+ Fonction : Mettre en majuscule la première lettre d'une chaîne
  ---------------------------------------------------- */
 export const capitalizeFirstLetter = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
 /* ----------------------------------------------------
-Fonction ajout copier dans le presse papier
- ----------------------------------------------------*/
+ Fonction : Copier du texte dans le presse-papiers
+ ---------------------------------------------------- */
 export const copyToClipboard = async (text) => {
   try {
     await navigator.clipboard.writeText(text);
@@ -18,23 +18,28 @@ export const copyToClipboard = async (text) => {
 };
 
 /* ----------------------------------------------------
- Fonction echappement caractères non alphabetique ( => prénom, nom etc..)
- ----------------------------------------------------*/
+ Fonction : Filtrer les caractères non alphabétiques (pour les prénoms, noms, etc.)
+ ---------------------------------------------------- */
 export const filterNonAlphabeticCharacters = (input) => {
   return input.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ-' ]/g, "");
 };
 
 /* ----------------------------------------------------
- Fonction echappement caractères non alphabetique numérique (chiffres autorisés)
- ----------------------------------------------------*/
+ Fonction : Filtrer les caractères non alphanumériques (chiffres autorisés)
+ ---------------------------------------------------- */
 export const filterNonAlphanumericCharacters = (input) => {
   return input.replace(/[^a-zA-Z0-9À-ÖØ-öø-ÿ-' ]/g, "");
 };
 
 /* ----------------------------------------------------
- Fonction echappement caractères spéciaux
- ----------------------------------------------------*/
-
+ Fonction : Filtrer les caractères spéciaux
+ ---------------------------------------------------- */
 export const filterSpecialCharacters = (input) => {
   return input.replace(/[<>&"/=]/g, "");
+};
+
+export const handleEsc = (event, callback) => {
+  if (event.key === "Escape") {
+    callback();
+  }
 };

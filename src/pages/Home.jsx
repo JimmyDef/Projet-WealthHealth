@@ -15,31 +15,7 @@ import {
 import Modal from "./../components/modal/Modal";
 const Home = () => {
   const dispatch = useDispatch();
-  const saveButtonRef = useRef(null);
-  // const mainContentRef = useRef(null);
   const toFocusRef = useRef(null);
-  /* ------------------------
-  Gestion MODAL
---------------------------- */
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
-
-  useEffect(() => {
-    const rootElement = document.getElementById("root");
-
-    if (isModalOpen) {
-      console.log("🚀 ~ toFocusRef.current:", toFocusRef.current);
-      toFocusRef.current?.focus();
-      rootElement.setAttribute("aria-hidden", "true");
-    } else {
-      saveButtonRef.current?.focus();
-      rootElement.setAttribute("aria-hidden", "false");
-    }
-  }, [isModalOpen]);
-  // ------------------------------
-
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -52,6 +28,27 @@ const Home = () => {
     department: null,
   });
   const [inputError, setInputError] = useState(false);
+  /* ------------------------
+  Gestion MODAL
+--------------------------- */
+
+  const [isModalOpen, setModalOpen] = useState(false);
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
+  useEffect(() => {
+    const rootElement = document.getElementById("root");
+
+    if (isModalOpen) {
+      rootElement.setAttribute("aria-hidden", "true");
+      rootElement.classList.add("modal-open");
+      toFocusRef.current?.focus();
+    } else {
+      rootElement.setAttribute("aria-hidden", "false");
+      rootElement.classList.remove("modal-open");
+    }
+  }, [isModalOpen]);
+  // ------------------------------
 
   const handleChange = (e, sanitizer) => {
     const { name, value } = e.target;
@@ -59,7 +56,7 @@ const Home = () => {
     setFormData({ ...formData, [name]: cleanedValue });
   };
 
-  const handleSubmit = (e) => {
+  const handleConfirmation = (e) => {
     e.preventDefault();
     const employeesInfo = {
       ...formData,
@@ -79,39 +76,37 @@ const Home = () => {
       startDate: undefined,
       street: "",
       city: "",
-      stateUS: "",
+      stateUS: null,
       zipCode: "",
-      department: "",
+      department: null,
     });
     setInputError(false);
     closeModal();
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const isEmpty = (value) =>
+      value === "" || value === undefined || value === null;
+    const hasEmptyField = Object.values(formData).some(isEmpty);
+    if (hasEmptyField) return setInputError(true);
+    setInputError(false);
+    openModal();
+    return;
+  };
 
   return (
     <>
-      <form
-        aria-hidden="true"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (
-            Object.values(formData).some(
-              (value) => value === "" || value === undefined
-            )
-          ) {
-            setInputError(true);
-            return;
-          }
-          openModal();
-        }}
-        className="create-form">
-        <section className="personal-section">
-          <h2>Personal Information</h2>
-          <div className="input-wrapper">
-            <label htmlFor="firstName">First Name</label>
+      <form onSubmit={handleSubmit} className="form form--create">
+        <section className="form__section form__section--personal">
+          <h2 className="form__section-title">Personal Information</h2>
+          <div className="form__input-wrapper">
+            <label htmlFor="firstName" className="form__label">
+              First Name
+            </label>
             <input
-              autoComplete="off"
-              className={`input-fields ${
-                inputError && !formData.firstName ? "error-warning" : ""
+              autoComplete="nope"
+              className={`form__input ${
+                inputError && !formData.firstName ? "form__input--error" : ""
               }`}
               type="text"
               id="firstName"
@@ -120,22 +115,26 @@ const Home = () => {
               onChange={(e) => handleChange(e, filterNonAlphabeticCharacters)}
             />
           </div>
-          <div className="input-wrapper">
-            <label htmlFor="lastName">Last Name</label>
+          <div className="form__input-wrapper">
+            <label htmlFor="lastName" className="form__label">
+              Last Name
+            </label>
             <input
-              className={`input-fields ${
-                inputError && !formData.lastName ? "error-warning" : ""
+              autoComplete="nope"
+              className={`form__input ${
+                inputError && !formData.lastName ? "form__input--error" : ""
               }`}
               type="text"
               id="lastName"
               name="lastName"
               value={formData.lastName}
               onChange={(e) => handleChange(e, filterNonAlphabeticCharacters)}
-              autoComplete="off"
             />
           </div>
-          <div className="input-wrapper">
-            <label htmlFor="dateOfBirth">Date of Birth</label>
+          <div className="form__input-wrapper">
+            <label htmlFor="dateOfBirth" className="form__label">
+              Date of Birth
+            </label>
             <CustomDatePicker
               id="dateOfBirth"
               ageControl={true}
@@ -146,8 +145,10 @@ const Home = () => {
               }
             />
           </div>
-          <div className="input-wrapper">
-            <label htmlFor="startDate">Start Date</label>
+          <div className="form__input-wrapper">
+            <label htmlFor="startDate" className="form__label">
+              Start Date
+            </label>
             <CustomDatePicker
               id="startDate"
               ageControl={false}
@@ -157,38 +158,44 @@ const Home = () => {
             />
           </div>
         </section>
-        <section className="adress-section">
-          <h2>Address Information</h2>
-          <div className="input-wrapper">
-            <label htmlFor="street">Street</label>
+        <section className="form__section form__section--address">
+          <h2 className="form__section-title">Address Information</h2>
+          <div className="form__input-wrapper">
+            <label htmlFor="street" className="form__label">
+              Street
+            </label>
             <input
-              className={`input-fields ${
-                inputError && !formData.street ? "error-warning" : ""
+              autoComplete="nope"
+              className={`form__input ${
+                inputError && !formData.street ? "form__input--error" : ""
               }`}
               type="text"
               id="street"
               name="street"
               value={formData.street}
               onChange={(e) => handleChange(e, filterNonAlphanumericCharacters)}
-              autoComplete="off"
             />
           </div>
-          <div className="input-wrapper">
-            <label htmlFor="city">City</label>
+          <div className="form__input-wrapper">
+            <label htmlFor="city" className="form__label">
+              City
+            </label>
             <input
+              autoComplete="nope"
               type="text"
               id="city"
               name="city"
-              className={`input-fields ${
-                inputError && !formData.city ? "error-warning" : ""
+              className={`form__input ${
+                inputError && !formData.city ? "form__input--error" : ""
               }`}
               value={formData.city}
               onChange={(e) => handleChange(e, filterNonAlphabeticCharacters)}
-              autoComplete="off"
             />
           </div>
-          <div className="input-wrapper" id="state-wrapper">
-            <label htmlFor="stateUS">State</label>
+          <div className="form__input-wrapper" id="state-wrapper">
+            <label htmlFor="stateUS" className="form__label">
+              State
+            </label>
             <SelectComponent
               inputError={inputError}
               listTitle="countryList"
@@ -198,54 +205,117 @@ const Home = () => {
               setState={(value) => setFormData({ ...formData, stateUS: value })}
             />
           </div>
-          <div className="input-wrapper">
-            <label htmlFor="zipCode">Zip Code</label>
+          <div className="form__input-wrapper">
+            <label htmlFor="zipCode" className="form__label">
+              Zip Code
+            </label>
             <input
-              className={`input-fields ${
-                inputError && !formData.zipCode ? "error-warning" : ""
+              autoComplete="nope"
+              className={`form__input ${
+                inputError && !formData.zipCode ? "form__input--error" : ""
               }`}
               type="text"
               id="zipCode"
               name="zipCode"
               value={formData.zipCode}
               onChange={(e) => handleChange(e, filterSpecialCharacters)}
-              autoComplete="off"
             />
           </div>
         </section>
-        <section className="department-section">
-          <h2>Job Information</h2>
-
-          <div className="input-wrapper" id="departement-wrapper">
-            <label htmlFor="department">Department</label>
+        <section className="form__section form__section--department">
+          <h2 className="form__section-title">Job Information</h2>
+          <div className="form__input-wrapper" id="department-wrapper">
+            <label htmlFor="department" className="form__label">
+              Department
+            </label>
             <SelectComponent
+              autoComplete="nope"
               inputError={inputError}
               listTitle="departmentList"
               id="department"
               options={departmentList}
               state={formData.department}
-              setState={(value) =>
-                setFormData({ ...formData, department: value })
-              }
+              setState={(value) => {
+                console.log("🚀 ~ value:", value);
+                setFormData({ ...formData, department: value });
+              }}
             />
           </div>
         </section>
 
-        <button
-          type="submit"
-          className="submit-btn"
-          tabIndex={0}
-          ref={saveButtonRef}>
-          Save
-        </button>
+        <div className="form__actions">
+          <button
+            role="button"
+            type="submit"
+            onClick={handleSubmit}
+            onFocus={closeModal}
+            className="form__submit-btn"
+            tabIndex={0}>
+            Save
+          </button>
+          {inputError && (
+            <p
+              role="alert"
+              aria-live="assertive"
+              className={`form__error-message ${
+                inputError ? "form__error-message--visible" : ""
+              }`}>
+              Please fill in all the fields.
+            </p>
+          )}
+        </div>
       </form>
+
       <Modal
         title="Infos confirmation"
-        onClose={() => closeModal()}
-        onConfirm={(e) => handleSubmit(e)}
+        onClose={closeModal}
+        onConfirm={handleConfirmation}
         isOpen={isModalOpen}
-        toFocusRef={toFocusRef}
-      />
+        toFocusRef={toFocusRef}>
+        <p>
+          Employee:{" "}
+          <span className="modal__informations">
+            {formData?.firstName} {formData?.lastName}
+          </span>
+        </p>
+        <p>
+          Birthdate:{" "}
+          {formData?.dateOfBirth ? (
+            <span className="modal__informations">
+              {formData.dateOfBirth.toLocaleDateString("fr")}
+            </span>
+          ) : (
+            ""
+          )}
+        </p>
+        <div>
+          <p className="modal__informations--adress">Adress:</p>{" "}
+          <span className="modal__informations">
+            {formData?.street}, {formData?.city},{" "}
+            {formData?.stateUS ? formData.stateUS.label : ""},{" "}
+            {formData?.zipCode}
+          </span>
+        </div>
+
+        <p>
+          Department:{" "}
+          <span className="modal__informations">
+            {formData?.department ? formData.department.value : ""}
+          </span>{" "}
+        </p>
+        <p>
+          Start date:{" "}
+          <span className="modal__informations">
+            {formData?.startDate ? (
+              <span className="modal__informations">
+                {formData.startDate.toLocaleDateString("fr")}
+              </span>
+            ) : (
+              ""
+            )}
+          </span>
+        </p>
+      </Modal>
     </>
   );
 };

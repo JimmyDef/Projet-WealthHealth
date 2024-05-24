@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,55 +12,92 @@
 }
 
 .content {
+  position: relative;
   text-align: center;
-  background-color: #c0c0c0;
-  padding: 20px;
+  background-color: #e6e6e6;
+  margin: 0 20px;
+  padding: 30px;
   border-radius: 5px;
   position: relative;
   min-width: 300px;
   max-width: 500px;
-  // box-shadow: 0px 10px 38px -10px rgb(90, 111, 8),
-  //   0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+  animation: modalopen 0.3s;
+
+  scroll-behavior: auto;
   cursor: default;
 }
-.buttonWrapper {
+.childrenSection {
+  margin: 0 auto 40px;
+  text-align: left;
+}
+
+.buttonSection {
   display: flex;
-  width: 100%;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
-  button {
-    // margin: auto;
-    width: 180px;
-    height: 35px;
-    align-self: flex-end;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    cursor: pointer;
-    color: white;
-    background-color: #485806;
+  gap: 15px 20px;
+}
+
+.confirmButton,
+.closeButton {
+  width: 150px;
+  height: 35px;
+  align-self: flex-end;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  cursor: pointer;
+  color: white;
+  background-color: #485806;
+  border: none;
+  border-radius: 5px;
+  transition: all 250ms;
+  &:hover {
+    background-color: #93ad18;
+  }
+  &:focus-visible {
+    background-color: #93ad18;
+    border: solid 2px black;
+    transition: all 0ms;
+    outline: none;
+  }
+  &:active {
+    transform: scale(0.98);
     border: none;
-    border-radius: 5px;
-    transition: all 250ms;
-    &:hover {
-      transform: scale(1.05);
-      background-color: #93ad18;
-    }
-    &:focus {
-      background-color: #93ad18;
-      border: solid 1px black;
-    }
+    transition: all 0ms;
   }
 }
-
-.closeButton {
-  // position: absolute;
-  // top: 10px;
-  // right: 10px;
-  // background: none;
-  // border: none;
-  // font-size: 1.5em;
+.crossButton {
   cursor: pointer;
-}
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: inherit;
+  transition: all 250ms;
 
-.confirmButton {
+  &:hover {
+    transform: scale(1.1);
+  }
+  &:active {
+    transform: scale(0.98);
+    border: none;
+    transition: all 0ms;
+  }
+}
+.crossImg {
+  height: 100%;
+  width: 100%;
+}
+@keyframes modalopen {
+  from {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  to {
+    opacity: 1;
+  }
 }

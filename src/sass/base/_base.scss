@@ -13,19 +13,11 @@
 }
 
 html {
-  display: flex;
-  justify-content: center;
   scrollbar-gutter: stable;
-  // overflow-y: scroll;
-}
-
-#body {
-  padding: 0;
+  overflow-y: scroll;
 }
 
 body {
-  position: relative;
-  width: 100%;
   min-width: 300px;
   font-family: "Roboto", sans-serif;
   max-width: $desktop-max-width;
