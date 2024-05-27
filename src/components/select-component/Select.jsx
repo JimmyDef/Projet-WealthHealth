@@ -1,8 +1,8 @@
 import Select, { components } from "react-select";
 import PropTypes from "prop-types";
-import { ListFormatter } from "./../../util/dataFormatters";
+import { ListFormatter } from "../../utils/dataFormatters";
 import "./select.scss";
-import { colors } from "../../util/variables-colors-typo";
+import { colors } from "../../utils/variables-colors-typo";
 
 const SelectComponent = ({
   state,

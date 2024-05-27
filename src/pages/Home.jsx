@@ -1,4 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+/**
+ * Home Component for managing employee information.
+ * @module Home
+ */
+
+import { useState } from "react";
 import "./home.scss";
 import CustomDatePicker from "../components/datePicker/DatePicker";
 import countryList from "./../assets/countryList.json";
@@ -8,14 +13,32 @@ import { addEmployeeInfos } from "./../redux/reducers";
 import { v4 as uuidv4 } from "uuid";
 import SelectComponent from "./../components/select-component/Select";
 import {
-  filterSpecialCharacters,
-  filterNonAlphabeticCharacters,
-  filterNonAlphanumericCharacters,
-} from "../util/modules";
+  removeSpecialCharacters,
+  removeNonAlphabeticCharacters,
+  removeNonAlphanumericCharacters,
+} from "../utils/modules";
 import Modal from "./../components/modal/Modal";
+
+/**
+ * Home Component to manage employee information.
+ * @returns {JSX.Element} Returns the JSX of the Home component.
+ */
 const Home = () => {
   const dispatch = useDispatch();
-  const toFocusRef = useRef(null);
+
+  /**
+   * State for managing form data.
+   * @type {Object}
+   * @property {string} firstName - First name of the employee.
+   * @property {string} lastName - Last name of the employee.
+   * @property {Date | undefined} dateOfBirth - Date of birth of the employee.
+   * @property {Date | undefined} startDate - Start date of the employee.
+   * @property {string} street - Street address of the employee.
+   * @property {string} city - City of the employee.
+   * @property {Object | null} stateUS - State of the employee (US).
+   * @property {string} zipCode - Zip code of the employee.
+   * @property {Object | null} department - Department of the employee.
+   */
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -27,35 +50,48 @@ const Home = () => {
     zipCode: "",
     department: null,
   });
-  const [inputError, setInputError] = useState(false);
-  /* ------------------------
-  Gestion MODAL
---------------------------- */
 
+  /**
+   * State for managing input error.
+   * @type {boolean}
+   */
+  const [inputError, setInputError] = useState(false);
+
+  /**
+   * State for managing modal open/close status.
+   * @type {boolean}
+   */
   const [isModalOpen, setModalOpen] = useState(false);
+
+  /**
+   * Opens the modal.
+   * @returns {void}
+   */
   const openModal = () => setModalOpen(true);
+
+  /**
+   * Closes the modal.
+   * @returns {void}
+   */
   const closeModal = () => setModalOpen(false);
 
-  useEffect(() => {
-    const rootElement = document.getElementById("root");
-
-    if (isModalOpen) {
-      rootElement.setAttribute("aria-hidden", "true");
-      rootElement.classList.add("modal-open");
-      toFocusRef.current?.focus();
-    } else {
-      rootElement.setAttribute("aria-hidden", "false");
-      rootElement.classList.remove("modal-open");
-    }
-  }, [isModalOpen]);
-  // ------------------------------
-
+  /**
+   * Handles form input change.
+   * @param {Event} e - The input change event.
+   * @param {Function} sanitizer - The function to sanitize input.
+   * @returns {void}
+   */
   const handleChange = (e, sanitizer) => {
     const { name, value } = e.target;
     const cleanedValue = sanitizer(value);
     setFormData({ ...formData, [name]: cleanedValue });
   };
 
+  /**
+   * Handles confirmation of form submission.
+   * @param {Event} e - The form submission event.
+   * @returns {void}
+   */
   const handleConfirmation = (e) => {
     e.preventDefault();
     const employeesInfo = {
@@ -68,7 +104,6 @@ const Home = () => {
     };
 
     dispatch(addEmployeeInfos(employeesInfo));
-    console.log("🚀 ~ employeesInfo:", employeesInfo);
     setFormData({
       firstName: "",
       lastName: "",
@@ -83,6 +118,12 @@ const Home = () => {
     setInputError(false);
     closeModal();
   };
+
+  /**
+   * Handles form submission.
+   * @param {Event} e - The form submission event.
+   * @returns {void}
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     const isEmpty = (value) =>
@@ -91,12 +132,13 @@ const Home = () => {
     if (hasEmptyField) return setInputError(true);
     setInputError(false);
     openModal();
-    return;
   };
-
   return (
     <>
-      <form onSubmit={handleSubmit} className="form form--create">
+      <form
+        onSubmit={handleSubmit}
+        className="form form--create"
+        autoComplete="offddzeze">
         <section className="form__section form__section--personal">
           <h2 className="form__section-title">Personal Information</h2>
           <div className="form__input-wrapper">
@@ -112,7 +154,7 @@ const Home = () => {
               id="firstName"
               name="firstName"
               value={formData.firstName}
-              onChange={(e) => handleChange(e, filterNonAlphabeticCharacters)}
+              onChange={(e) => handleChange(e, removeNonAlphabeticCharacters)}
             />
           </div>
           <div className="form__input-wrapper">
@@ -128,7 +170,7 @@ const Home = () => {
               id="lastName"
               name="lastName"
               value={formData.lastName}
-              onChange={(e) => handleChange(e, filterNonAlphabeticCharacters)}
+              onChange={(e) => handleChange(e, removeNonAlphabeticCharacters)}
             />
           </div>
           <div className="form__input-wrapper">
@@ -173,7 +215,7 @@ const Home = () => {
               id="street"
               name="street"
               value={formData.street}
-              onChange={(e) => handleChange(e, filterNonAlphanumericCharacters)}
+              onChange={(e) => handleChange(e, removeNonAlphanumericCharacters)}
             />
           </div>
           <div className="form__input-wrapper">
@@ -189,7 +231,7 @@ const Home = () => {
                 inputError && !formData.city ? "form__input--error" : ""
               }`}
               value={formData.city}
-              onChange={(e) => handleChange(e, filterNonAlphabeticCharacters)}
+              onChange={(e) => handleChange(e, removeNonAlphabeticCharacters)}
             />
           </div>
           <div className="form__input-wrapper" id="state-wrapper">
@@ -218,7 +260,7 @@ const Home = () => {
               id="zipCode"
               name="zipCode"
               value={formData.zipCode}
-              onChange={(e) => handleChange(e, filterSpecialCharacters)}
+              onChange={(e) => handleChange(e, removeSpecialCharacters)}
             />
           </div>
         </section>
@@ -236,7 +278,6 @@ const Home = () => {
               options={departmentList}
               state={formData.department}
               setState={(value) => {
-                console.log("🚀 ~ value:", value);
                 setFormData({ ...formData, department: value });
               }}
             />
@@ -269,9 +310,8 @@ const Home = () => {
       <Modal
         title="Infos confirmation"
         onClose={closeModal}
-        onConfirm={handleConfirmation}
-        isOpen={isModalOpen}
-        toFocusRef={toFocusRef}>
+        onConfirmClick={handleConfirmation}
+        isOpen={isModalOpen}>
         <p>
           Employee:{" "}
           <span className="modal__informations">

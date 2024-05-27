@@ -10,9 +10,11 @@
   max-width: $desktop-max-width;
 
   .img-wrapper {
+    margin-right: 11px;
     width: 33%;
   }
   img {
+    animation: rotate 60s linear infinite;
     width: 100px;
   }
   h1 {
@@ -114,5 +116,14 @@
         margin-left: 0;
       }
     }
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

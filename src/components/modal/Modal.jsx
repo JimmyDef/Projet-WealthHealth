@@ -1,55 +1,78 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
-import { handleEsc } from "../../util/modules";
-import styles from "./modal.module.scss";
-import crossButton from "./../../assets/cross.png";
+import styles from "./modal.module.css";
+import crossButton from "./../../assets/cross.svg";
+
+/**
+ * Modal is a React component for displaying a modal window.
+ *
+ * @param {Object} props The properties of the component.
+ * @param {boolean} props.isOpen Indicates whether the modal is open.
+ * @param {function} props.onClose Function called to close the modal.
+ * @param {React.ReactNode} props.children Content to be displayed in the modal.
+ * @param {string} props.title The title of the modal.
+ * @param {function} [props.onConfirmClick] Function called when the confirm button is clicked.
+ * @param {React.RefObject} [props.focusRef] Reference to the element to focus when the modal opens.
+ * @param {boolean} [props.showCloseButton=false] Indicates whether the cross close button should be displayed.
+ * @param {boolean} [props.showCancelButton=true] Indicates whether the close button should be displayed.
+ * @param {string} [props.closeButtonLabel="Close"] Alternative text for the close button.
+ * @param {string} [props.closeButtonIcon=crossButton] Path of the image for the close button.
+ * @returns {JSX.Element|null} The JSX rendered output of the component or null if the modal is closed.
+ */
+
 const Modal = ({
   isOpen,
   onClose,
   children,
   title,
-  onConfirm,
-  toFocusRef,
-  showCrossButton = false,
+  onConfirmClick,
+
+  showCloseButton = false,
   showCancelButton = true,
-  closeButtonText = "Close",
-  imageCloseButton = crossButton,
+  closeButtonLabel = "Close",
+  closeButtonIcon = crossButton,
 }) => {
-  Modal.propTypes = {
-    isOpen: PropTypes.bool.isRequired,
-    closeButtonText: PropTypes.string,
-    showCrossButton: PropTypes.bool,
-    showCancelButton: PropTypes.bool,
-    onClose: PropTypes.func.isRequired,
-    onConfirm: PropTypes.func,
-    toFocusRef: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-    ]),
-    title: PropTypes.string.isRequired,
-    children: PropTypes.node,
-    imageCloseButton: PropTypes.string,
-  };
+  const focusRef = useRef();
 
+  // Effect to manage focus when modal opens or closes
   useEffect(() => {
-    const handleKeyDown = (event) => handleEsc(event, onClose);
-
+    const rootElement = document.getElementById("root");
     if (isOpen) {
-      window.addEventListener("keydown", handleKeyDown);
+      rootElement.setAttribute("aria-hidden", "true");
+      rootElement.classList.add("modal-open");
+      focusRef.current?.focus();
     } else {
-      window.removeEventListener("keydown", handleKeyDown);
+      rootElement.setAttribute("aria-hidden", "false");
+      rootElement.classList.remove("modal-open");
+    }
+  }, [isOpen]);
+
+  // Effect to handle Escape key press to close the modal
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener("keydown", handleEsc);
+    } else {
+      window.removeEventListener("keydown", handleEsc);
     }
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", handleEsc);
     };
   }, [isOpen, onClose]);
 
+  // Render nothing if modal is closed
   if (!isOpen) return null;
+
+  // Render modal content
   return createPortal(
     <div
       tabIndex={0}
-      ref={toFocusRef}
+      ref={focusRef}
       className={`${styles.overlay} jcm_Overlay`}
       role="dialog"
       aria-modal="true">
@@ -61,10 +84,10 @@ const Modal = ({
           {children}
         </section>
         <section className={`${styles.buttonSection} jcm_ButtonSection`}>
-          {onConfirm && (
+          {onConfirmClick && (
             <button
               className={`${styles.confirmButton} jcm_ConfirmButton`}
-              onClick={onConfirm}>
+              onClick={onConfirmClick}>
               Confirmation
             </button>
           )}
@@ -72,15 +95,15 @@ const Modal = ({
             <button
               className={`${styles.closeButton} jcm_CloseButton`}
               onClick={onClose}>
-              {closeButtonText}
+              {closeButtonLabel}
             </button>
           )}
-          {showCrossButton && (
+          {showCloseButton && (
             <button
               className={`${styles.crossButton} jcm_CrossButton`}
               onClick={onClose}>
               <img
-                src={imageCloseButton}
+                src={closeButtonIcon}
                 alt="close icon"
                 className={styles.crossImg}
               />
@@ -93,4 +116,16 @@ const Modal = ({
   );
 };
 
+Modal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  closeButtonLabel: PropTypes.string,
+  showCloseButton: PropTypes.bool,
+  showCancelButton: PropTypes.bool,
+  onConfirmClick: PropTypes.func,
+
+  children: PropTypes.node,
+  closeButtonIcon: PropTypes.string,
+};
 export default Modal;

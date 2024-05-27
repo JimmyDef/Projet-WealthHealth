@@ -1,9 +1,12 @@
 .table-container {
+  margin: 0 auto;
+  max-width: 950px;
   display: grid;
   grid-template:
     "Title Title"
     "pagination search "
-    "tableBody tableBody";
+    "tableBody tableBody"
+    "modal modal";
   .header-title {
     margin: 0 0 20px;
     font-size: 24px;

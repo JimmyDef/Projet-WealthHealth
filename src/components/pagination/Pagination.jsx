@@ -9,7 +9,7 @@ import {
 import PropTypes from "prop-types";
 import IconButton from "../iconButton/IconButton";
 import "./pagination.scss";
-import { colors } from "../../util/variables-colors-typo";
+import { colors } from "../../utils/variables-colors-typo";
 
 const CustomMaterialPagination = ({
   rowsPerPage,
@@ -102,7 +102,7 @@ const CustomMaterialPagination = ({
   };
 
   return (
-    <div className="pagination__wrapper">
+    <div tabIndex={1} className="pagination__wrapper">
       <div className="pagination__row-info">
         <label className="pagination__row-label" htmlFor="rowsPerPage">
           Rows per page:{" "}
@@ -124,6 +124,7 @@ const CustomMaterialPagination = ({
       </div>
       <div className="pagination__iconButton-container">
         <IconButton
+          label="first page"
           onClick={handleFirstPageButtonClick}
           disabled={currentPage === 1}
           aria-label="first page">
@@ -134,6 +135,7 @@ const CustomMaterialPagination = ({
           />
         </IconButton>
         <IconButton
+          label="previous page"
           onClick={handleBackButtonClick}
           disabled={currentPage === 1}
           aria-label="previous page">
@@ -144,6 +146,7 @@ const CustomMaterialPagination = ({
           />
         </IconButton>
         <IconButton
+          label="next page"
           onClick={handleNextButtonClick}
           disabled={currentPage === getNumberOfPages(rowCount, rowsPerPage)}
           aria-label="next page">
@@ -154,6 +157,7 @@ const CustomMaterialPagination = ({
           />
         </IconButton>
         <IconButton
+          label="last page"
           onClick={handleLastPageButtonClick}
           disabled={currentPage === getNumberOfPages(rowCount, rowsPerPage)}
           aria-label="last page">

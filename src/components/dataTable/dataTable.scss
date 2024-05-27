@@ -40,3 +40,8 @@ div .rdt_TableCell {
   color: $color-secondary;
   font-style: italic;
 }
+div .rdt_TableCol_Sortable {
+  &:focus-visible {
+    outline: 2px solid black;
+  }
+}

@@ -1,7 +1,7 @@
 import { StyleSheetManager } from "styled-components";
 import DataTable from "react-data-table-component";
 import { useSelector } from "react-redux";
-import { capitalizeFirstLetter, copyToClipboard } from "../../util/modules";
+import { capitalizeFirstLetter, copyToClipboard } from "../../utils/modules";
 import { useEffect, useRef, useState } from "react";
 import "./dataTable.scss";
 import TextField from "../searchInput/TextField";
@@ -17,7 +17,7 @@ const EmployeesDataTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const toFocusRef = useRef(null);
+  const focusRef = useRef(null);
 
   const [search, setSearch] = useState("");
 
@@ -32,8 +32,15 @@ const EmployeesDataTable = () => {
   }, [search, employeesInfo]);
 
   useEffect(() => {
+    const rootElement = document.getElementById("root");
+
     if (isModalOpen) {
-      toFocusRef.current?.focus();
+      rootElement.setAttribute("aria-hidden", "true");
+      rootElement.classList.add("modal-open");
+      focusRef.current?.focus();
+    } else {
+      rootElement.setAttribute("aria-hidden", "false");
+      rootElement.classList.remove("modal-open");
     }
   }, [isModalOpen]);
 
@@ -135,7 +142,6 @@ const EmployeesDataTable = () => {
     setPersonalRecord(rowInformation);
     copyToClipboard(rowInformation);
     setIsModalOpen(true);
-    console.log(rowInformation);
   };
   const subHeaderComponent = (
     <div className="subHeaderComponent">
@@ -165,11 +171,10 @@ const EmployeesDataTable = () => {
       </StyleSheetManager>
       {isModalOpen ? (
         <Modal
-          toFocusRef={toFocusRef}
           title="Personal record"
           isOpen={isModalOpen}
           onClose={closeModal}
-          showCrossButton>
+          showCloseButton>
           <p className="modal__text">{personalRecord}</p>
         </Modal>
       ) : null}
