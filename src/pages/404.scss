@@ -1,7 +1,7 @@
 @import "./../sass/utils/variables-mixin";
 .not-found-wrapper {
   text-align: center;
-  margin: 50px auto;
+  // margin: 30px auto;
   padding: 40px;
   h1 {
     font-size: 6rem;
@@ -15,15 +15,16 @@
     margin-bottom: 50px;
   }
   a {
+    display: inline-block;
     color: $color-white;
-    background-color: $color-primary;
+    background-color: $color-secondary;
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s ease;
     &:hover {
-      background-color: $color-secondary;
+      background-color: $color-primary;
       color: $color-white;
     }
   }

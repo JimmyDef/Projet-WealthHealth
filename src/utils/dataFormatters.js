@@ -1,8 +1,7 @@
-
 export class ListFormatter {
-  constructor(list, listTitle) {
+  constructor(list, listName) {
     this._list = list;
-    this._name = listTitle;
+    this._name = listName;
   }
   getData() {
     if (this._name === "departmentList") {

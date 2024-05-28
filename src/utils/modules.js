@@ -52,15 +52,3 @@ export const removeNonAlphanumericCharacters = (input) => {
 export const removeSpecialCharacters = (input) => {
   return input.replace(/[<>&"/=]/g, "");
 };
-
-/**
- * Handles the "Escape" key.
- *
- * @param {KeyboardEvent} event The keyboard event.
- * @param {Function} callback The callback function to call when the "Escape" key is pressed.
- */
-export const handleEsc = (event, callback) => {
-  if (event.key === "Escape") {
-    callback();
-  }
-};

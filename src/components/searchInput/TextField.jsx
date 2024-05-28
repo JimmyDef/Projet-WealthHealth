@@ -1,5 +1,14 @@
 import PropTypes from "prop-types";
 import "./textField.scss";
+
+/**
+ * Text field component for user search input.
+ * @param {Object} props - The props object.
+ * @param {string} props.search - The search query.
+ * @param {function} props.onChange - The onChange event handler.
+ * @returns {JSX.Element} A text field component.
+ */
+
 const TextField = ({ search, onChange }) => {
   return (
     <div className="textfield-group">

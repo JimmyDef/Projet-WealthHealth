@@ -1,6 +1,12 @@
 import logo from "./../../assets/logo.png";
 import "./header.scss";
 import { NavLink } from "react-router-dom";
+
+/**
+ * Header component displaying the logo and navigation links.
+ * @returns {JSX.Element} The JSX element representing the Header component.
+ */
+
 const Header = () => {
   return (
     <header className="header">
