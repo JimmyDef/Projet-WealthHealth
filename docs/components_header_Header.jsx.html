@@ -45,7 +45,8 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import logo from "./../../assets/logo.png";
+            <pre class="prettyprint source linenums"><code>import logoWebP from "./../../assets/logo.webp";
+import logoPNG from "./../../assets/logo.png";
 import "./header.scss";
 import { NavLink } from "react-router-dom";
 
@@ -58,7 +59,10 @@ const Header = () => {
   return (
     &lt;header className="header">
       &lt;div className="img-wrapper">
-        &lt;img src={logo} alt="logo de Wealth Health" />
+        &lt;picture>
+          &lt;source srcSet={logoWebP} type="image/webp" />
+          &lt;img src={logoPNG} alt="logo de Wealth Health" />
+        &lt;/picture>
       &lt;/div>
 
       &lt;h1>HRnet&lt;/h1>

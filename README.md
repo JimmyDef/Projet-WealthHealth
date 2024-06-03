@@ -11,6 +11,10 @@
 - Lancer le Front-end - **npm run dev**.
 - La persistance des données est géré par Redux et le local storage.
 
+## Documentation JSDOC du projet
+
+[La documentation complète disponible ici](https://jimmydef.github.io/Projet-WealthHealth/).
+
 ## Nouvelle configuration HRNET
 
 L'ancienne version du site utilisait des plugins Jquery entrainant des bugs considérables ainsi que des ralentissements. Le front-end a donc été converti entièrement en React a l'aide de ViteJS.
@@ -59,10 +63,6 @@ Composant = Info-bulle, complémentaire à react-data-table-component
 - [docdash](https://www.npmjs.com/package/docdash)
 
 ## Etude des performances
-
-## Documentation
-
-La documentation complète est disponible [ici](https://jimmydef.github.io/Projet-WealthHealth/).
 
 ## Auteur
 

@@ -1,4 +1,5 @@
-import logo from "./../../assets/logo.png";
+import logoWebP from "./../../assets/logo.webp";
+import logoPNG from "./../../assets/logo.png";
 import "./header.scss";
 import { NavLink } from "react-router-dom";
 
@@ -11,7 +12,10 @@ const Header = () => {
   return (
     <header className="header">
       <div className="img-wrapper">
-        <img src={logo} alt="logo de Wealth Health" />
+        <picture>
+          <source srcSet={logoWebP} type="image/webp" />
+          <img src={logoPNG} alt="logo de Wealth Health" />
+        </picture>
       </div>
 
       <h1>HRnet</h1>

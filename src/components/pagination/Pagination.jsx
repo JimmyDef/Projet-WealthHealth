@@ -124,7 +124,7 @@ const CustomMaterialPagination = ({
   };
 
   return (
-    <div tabIndex={1} className="pagination__wrapper">
+    <div className="pagination__wrapper">
       <div className="pagination__row-info">
         <label className="pagination__row-label" htmlFor="rowsPerPage">
           Rows per page:{" "}

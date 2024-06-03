@@ -19,7 +19,10 @@ const router = createBrowserRouter([
         path: "/employee-database",
         element: <EmployeeDB />,
       },
-
+      {
+        path: "/index.html",
+        element: <Home />,
+      },
       {
         path: "*",
         element: <NotFound />,

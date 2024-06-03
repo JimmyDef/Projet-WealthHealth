@@ -1,18 +1,17 @@
 import "./employeeDB.scss";
+import { Suspense, lazy } from "react";
 
-/**
- * EmployeeDB is a React component that displays the current employees.
- * It includes a header and a data table of employees with features like search engine and pagination menu.
- *
- * @returns {JSX.Element} The JSX rendered output of the EmployeeDB component.
- */
+const LazyEmployeesDataTable = lazy(() =>
+  import("../components/dataTable/DataTable")
+);
 
-import EmployeesDataTable from "../components/dataTable/DataTable";
 const EmployeeDB = () => {
   return (
     <div className="table-container">
       <h2 className="header-title"> Current Employees </h2>
-      <EmployeesDataTable />
+      <Suspense fallback={<div>Loading...</div>}>
+        <LazyEmployeesDataTable />
+      </Suspense>
     </div>
   );
 };

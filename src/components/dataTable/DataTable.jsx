@@ -176,7 +176,7 @@ const EmployeesDataTable = () => {
         title="Personal record"
         isOpen={isModalOpen}
         onClose={closeModal}
-        showCloseButton>
+        showCloseButtonIcon>
         <p className="modal__text">{personalRecord}</p>
       </Modal>
     </>
