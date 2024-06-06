@@ -323,7 +323,6 @@ const Home = () => {
             {formData?.zipCode}
           </span>
         </div>
-
         <p>
           Department:{" "}
           <span className="modal__informations">
