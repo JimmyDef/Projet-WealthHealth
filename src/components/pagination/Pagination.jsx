@@ -130,7 +130,7 @@ const CustomMaterialPagination = ({
           Rows per page:{" "}
         </label>
         <Select
-          aria-label="rowsPerPage"
+          id="rowsPerPage"
           className="pagination__react-select"
           classNamePrefix="react-select-pagination"
           value={options.find((option) => option.value === rowsPerPage)}

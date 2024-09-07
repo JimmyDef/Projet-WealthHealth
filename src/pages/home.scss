@@ -5,7 +5,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-
   position: fixed;
 }
 
@@ -122,5 +121,10 @@
   margin-bottom: 8px;
   &--adress {
     display: inline;
+  }
+}
+.rsmj_ButtonSection {
+  .rsmj_CancelButton {
+    // background-color: unset;
   }
 }

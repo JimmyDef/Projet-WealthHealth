@@ -62,8 +62,6 @@ Composant = Info-bulle, complémentaire à react-data-table-component
 - [Fontawesome ](https://fontawesome.com/)
 - [docdash](https://www.npmjs.com/package/docdash)
 
-## Etude des performances
-
 ## Auteur
 
 **Defains Jimmy**
@@ -128,8 +126,6 @@ Component = Tooltip, complementary to react-data-table-component
 - [ESLint](https://eslint.org/)
 - [Fontawesome](https://fontawesome.com/)
 - [docdash](https://www.npmjs.com/package/docdash)
-
-## Performance Study
 
 ## Documentation
 
